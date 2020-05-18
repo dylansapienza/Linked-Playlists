@@ -1,3 +1,4 @@
+require("dotenv").config({ path: __dirname + "/./../.env" });
 const mongoose = require("mongoose");
 var express = require("express"); // Express web server framework
 var request = require("request"); // "Request" library
@@ -13,10 +14,9 @@ mongoose.connect(
   { dbName: "spotifyapp" }
 );
 
-var client_id = "962b904bd89942c7ac577dd434b62b14"; // Your client id
-var client_secret = "ded6b0bcae7149c4aaf2e0319cd6b4df"; // Your secret
+var client_id = process.env.CLIENT_ID; // Your client id
+var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = "http://localhost:8888/callback"; // Your redirect uri
-
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
