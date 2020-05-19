@@ -7,7 +7,7 @@ require("dotenv").config({ path: __dirname + "/./../../.env" });
 const mongoose = require("mongoose");
 const request = require("request");
 const User = require("../modules/User");
-
+const Playlist = require("../modules/Playlist");
 mongoose.connect(
   "mongodb+srv://dylansap:spotifyapp@spotifyapp-eey1y.mongodb.net/test?retryWrites=true&w=majority",
   { dbName: "spotifyapp" }
@@ -53,7 +53,20 @@ module.exports = {
 
             async function callback(error, response, body) {
               if (!error && response.statusCode == 201) {
-                console.log(body);
+                var plist_data = JSON.parse(body);
+                console.log(plist_data.id);
+                const playlist = new Playlist({
+                  _id: new mongoose.Types.ObjectId(),
+                  name: query_name,
+                  playlist_id: plist_data.id,
+                  id: query_userid,
+                  email: queryemail,
+                });
+
+                playlist.save().then((result) => {
+                  console.log(result);
+                });
+
                 resolve("sucesss!");
               } else {
                 console.log(error);

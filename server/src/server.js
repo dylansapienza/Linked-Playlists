@@ -6,6 +6,7 @@ var cors = require("cors");
 var querystring = require("querystring");
 var cookieParser = require("cookie-parser");
 const User = require("./modules/User");
+const Playlist = require("./modules/Playlist");
 const apiCalls = require("./api/apicalls");
 
 //Need to add flags to avoid deprication MONGODB
