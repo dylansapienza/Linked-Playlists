@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const request = require("request");
 const User = require("../modules/User");
 const Playlist = require("../modules/Playlist");
+const Recommendation = require("../modules/Recommendation");
 mongoose.connect(
   "mongodb+srv://dylansap:spotifyapp@spotifyapp-eey1y.mongodb.net/test?retryWrites=true&w=majority",
   { dbName: "spotifyapp" }
@@ -150,9 +151,94 @@ module.exports = {
     });
   },
 
-  addSongToPlaylist: async function refreshToken(song_id, playlist_id) {
+  addSongToPlaylist: async function addSongToPlaylist(
+    song_id,
+    host_id,
+    friend_id,
+    comment,
+    rating
+  ) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {}, 3000);
+      setTimeout(() => {
+        //Access token of host_id,
+
+        Playlist.findOne({ id: host_id })
+          .exec()
+          .then((doc) => {
+            console.log(doc);
+            const query_playlistid = doc.playlist_id;
+
+            User.findOne({ id: host_id })
+              .exec()
+              .then((doc2) => {
+                console.log(doc2);
+                const host_token = doc2.access_token;
+                const query_refresh = doc2.refresh_token;
+
+                //Insert Song into playlist
+
+                var headers = {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + host_token,
+                };
+
+                //trackid: spotify:track:49H4LDNFE5BU7ZMIg8UsZy
+
+                var options = {
+                  url:
+                    "https://api.spotify.com/v1/playlists/" +
+                    query_playlistid +
+                    "/tracks?uris=spotify%3Atrack%3A49H4LDNFE5BU7ZMIg8UsZy",
+                  method: "POST",
+                  headers: headers,
+                };
+
+                async function callback(error, response, body) {
+                  if (!error && response.statusCode == 201) {
+                    console.log(body);
+                    const recommendation = new Recommendation({
+                      _id: new mongoose.Types.ObjectId(),
+                      track_id: "spotify:track:49H4LDNFE5BU7ZMIg8UsZy",
+                      playlist_id: query_playlistid,
+                      host_id: host_id,
+                      friend_id: friend_id,
+                      comment: comment,
+                      rating: rating,
+                    });
+
+                    recommendation.save().then((result) => {
+                      console.log(result);
+                      resolve("sucesss!");
+                    });
+                  } else if (response.statusCode === 401) {
+                    let result = await module.exports.refreshToken(
+                      query_refresh
+                    );
+                    if (result === true) {
+                      module.exports.addSongToPlaylist(
+                        song_id,
+                        host_id,
+                        friend_id,
+                        comment,
+                        rating
+                      );
+                    } else {
+                      resolve("Could not refresh access token!");
+                    }
+                  } else {
+                    console.log(response.statusCode);
+                    console.log(body);
+                    resolve("Playlist Add Failure:" + response.statusCode);
+                  }
+                }
+
+                //If successful, Insert into database
+
+                request(options, callback);
+              });
+          });
+      }, 3000);
     });
   },
 };
