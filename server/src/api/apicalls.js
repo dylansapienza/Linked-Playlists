@@ -51,7 +51,7 @@ module.exports = {
               body: dataString,
             };
 
-            function callback(error, response, body) {
+            async function callback(error, response, body) {
               if (!error && response.statusCode == 201) {
                 console.log(body);
                 resolve("sucesss!");
@@ -59,8 +59,13 @@ module.exports = {
                 console.log(error);
                 if (response.statusCode === 401) {
                   console.log("Authorization Token Expired or Invalid");
-                  module.exports.refreshToken(query_refresh);
-                  resolve("Authorization Token Expired or Invalid");
+                  let result = await module.exports.refreshToken(queryemail);
+                  console.log(result);
+                  if (result === true) {
+                    module.exports.createPlaylist(queryemail);
+                  } else {
+                    resolve("Could not refresh access token!");
+                  }
                 } else {
                   resolve("Great Failure:" + response.statusCode);
                 }
@@ -110,16 +115,18 @@ module.exports = {
               (err, doc) => {
                 if (err) {
                   console.log(err);
+                  resolve(false);
                 } else {
                   console.log(doc);
+                  resolve(true);
                 }
               }
             );
-            console.log("AWAIT!");
           } else {
             console.log(response.statusCode);
             console.log(body);
             console.log(error);
+            resolve(false);
           }
         });
 
@@ -127,6 +134,12 @@ module.exports = {
         //Update user document with new access token / refresh token
         //resolve new access token
       }, 3000);
+    });
+  },
+
+  addSongToPlaylist: async function refreshToken(song_id, playlist_id) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {}, 3000);
     });
   },
 };
