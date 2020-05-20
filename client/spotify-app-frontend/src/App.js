@@ -1,6 +1,23 @@
 import React from "react";
-import logo from "./logo.svg";
+import {
+  IonApp,
+  IonMenu,
+  IonItem,
+  IonCard,
+  IonCardContent,
+} from "@ionic/react";
+import { BrowserRouter, Route } from "react-router-dom";
+import "@ionic/core/css/ionic.bundle.css";
 import "./App.css";
+
+// const Menu = ({ history }) => {
+//   <IonMenu>
+//     <IonItem onClick={() => history.push("/")}>Home</IonItem>;
+//     <IonItem onClick={() => history.push("/about")}>About</IonItem>;
+//   </IonMenu>;
+// };
+
+const About = () => <p>About</p>;
 
 class App extends React.Component {
   constructor(props) {
@@ -18,13 +35,15 @@ class App extends React.Component {
   }
 
   render() {
+    const Home = () => <p>{this.state.apiResponse}</p>;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-        </header>
-        <p>{this.state.apiResponse}</p>
-      </div>
+      <BrowserRouter>
+        <IonApp>
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+        </IonApp>
+      </BrowserRouter>
     );
   }
 }
