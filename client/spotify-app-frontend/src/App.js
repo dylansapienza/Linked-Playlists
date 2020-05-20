@@ -42,11 +42,9 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <IonApp>
-          <IonRouterOutlet>
-            <Route exact path="/" component={Home} />
-            <Route path="/auth" component={Authenticate} />
-            <Route path="/playlists" component={MyPlaylists} />
-          </IonRouterOutlet>
+          <Route exact path="/" component={Home} />
+          <Route path="/auth" component={Authenticate} />
+          <Route path="/playlists" component={MyPlaylists} />
         </IonApp>
       </BrowserRouter>
     );
