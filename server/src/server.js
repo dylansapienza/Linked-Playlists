@@ -41,7 +41,8 @@ var app = express();
 app
   .use(express.static(__dirname + "\\../public"))
   .use(cors())
-  .use(cookieParser());
+  .use(cookieParser())
+  .use(express.json());
 
 app.get("/login", function (req, res) {
   var state = generateRandomString(16);
@@ -142,39 +143,44 @@ app.get("/callback", function (req, res) {
   }
 });
 
-app.get("/api/playlist/:email", async function (req, res) {
-  const queryemail = req.params.email;
-
+app.post("/api/playlist/", async (req, res) => {
+  const queryemail = req.body.email;
+  //const passkey = req.body.passkey; For Future Auth
   const output = await apiCalls.createPlaylist(queryemail);
+
+  res.send(output);
+});
+
+// app.get("/api/playlist/:email", async function (req, res) {
+//   const queryemail = req.params.email;
+
+//   const output = await apiCalls.createPlaylist(queryemail);
+
+//   console.log(output);
+
+//   res.send(output);
+// });
+
+//Should probably send through a post request
+app.post("/api/recommendation/", async function (req, res) {
+  const host_id = req.body.host_id;
+  const friend_id = req.body.friend_id;
+  const comment = req.body.comment;
+  const rating = req.body.rating;
+  const song_id = req.body.song_id;
+
+  const output = await apiCalls.addSongToPlaylist(
+    song_id,
+    host_id,
+    friend_id,
+    comment,
+    rating
+  );
 
   console.log(output);
 
   res.send(output);
 });
-
-//Should probably send through a post request
-app.get(
-  "/api/recommendation/:host_id/:friend_id/:comment/:rating/",
-  async function (req, res) {
-    const host_id = req.params.host_id;
-    const friend_id = req.params.friend_id;
-    const comment = req.params.comment;
-    const rating = req.params.rating;
-    const song_id = "lol";
-
-    const output = await apiCalls.addSongToPlaylist(
-      song_id,
-      host_id,
-      friend_id,
-      comment,
-      rating
-    );
-
-    console.log(output);
-
-    res.send(output);
-  }
-);
 
 app.get("/refresh_token", function (req, res) {
   // requesting access token from refresh token
