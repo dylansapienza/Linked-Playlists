@@ -5,10 +5,14 @@ import {
   IonItem,
   IonCard,
   IonCardContent,
+  IonRouterOutlet,
 } from "@ionic/react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "@ionic/core/css/ionic.bundle.css";
 import "./App.css";
+import Home from "./components/Home";
+import Authenticate from "./components/Authenticate";
+import MyPlaylists from "./components/MyPlaylists";
 
 // const Menu = ({ history }) => {
 //   <IonMenu>
@@ -35,13 +39,14 @@ class App extends React.Component {
   }
 
   render() {
-    const Home = () => <p>{this.state.apiResponse}</p>;
-
     return (
       <BrowserRouter>
         <IonApp>
-          <Route exact path="/" component={Home} />
-          <Route path="/about" component={About} />
+          <IonRouterOutlet>
+            <Route exact path="/" component={Home} />
+            <Route path="/auth" component={Authenticate} />
+            <Route path="/playlists" component={MyPlaylists} />
+          </IonRouterOutlet>
         </IonApp>
       </BrowserRouter>
     );
