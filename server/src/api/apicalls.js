@@ -174,7 +174,7 @@ module.exports = {
                 console.log(doc2);
                 const host_token = doc2.access_token;
                 const query_refresh = doc2.refresh_token;
-
+                const escaped_song_id = escape(song_id);
                 //Insert Song into playlist
 
                 var headers = {
@@ -189,7 +189,8 @@ module.exports = {
                   url:
                     "https://api.spotify.com/v1/playlists/" +
                     query_playlistid +
-                    "/tracks?uris=spotify%3Atrack%3A49H4LDNFE5BU7ZMIg8UsZy",
+                    "/tracks?uris=" +
+                    escaped_song_id,
                   method: "POST",
                   headers: headers,
                 };
@@ -199,7 +200,7 @@ module.exports = {
                     console.log(body);
                     const recommendation = new Recommendation({
                       _id: new mongoose.Types.ObjectId(),
-                      track_id: "spotify:track:49H4LDNFE5BU7ZMIg8UsZy",
+                      track_id: song_id,
                       playlist_id: query_playlistid,
                       host_id: host_id,
                       friend_id: friend_id,
