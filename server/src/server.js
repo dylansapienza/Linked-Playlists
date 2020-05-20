@@ -182,6 +182,10 @@ app.post("/api/recommendation/", async function (req, res) {
   res.send(output);
 });
 
+app.get("/testAPI", (req, res) => {
+  res.send("API is working properly");
+});
+
 app.get("/refresh_token", function (req, res) {
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
