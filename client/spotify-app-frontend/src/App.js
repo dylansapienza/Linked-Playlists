@@ -11,7 +11,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import "@ionic/core/css/ionic.bundle.css";
 import "./App.css";
 import Home from "./components/Home";
-import Authenticate from "./components/Authenticate";
+import AddAccountInfo from "./components/AddAccountInfo";
 import MyPlaylists from "./components/MyPlaylists";
 
 // const Menu = ({ history }) => {
@@ -43,7 +43,7 @@ class App extends React.Component {
       <BrowserRouter>
         <IonApp>
           <Route exact path="/" component={Home} />
-          <Route path="/auth" component={Authenticate} />
+          <Route path="/accountinfo" component={AddAccountInfo} />
           <Route path="/playlists" component={MyPlaylists} />
         </IonApp>
       </BrowserRouter>
