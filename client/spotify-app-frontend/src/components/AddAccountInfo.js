@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   IonApp,
   IonHeader,
@@ -20,13 +21,36 @@ import {
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
+function postInfo(username, fname, lname, email, password, user_id) {
+  const p_info = {
+    spotify_id: user_id,
+    username: username,
+    fname: fname,
+    lname: lname,
+    email: email,
+    password: password,
+  };
+  axios
+    .post("http://localhost:8888/accountcreation", p_info, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 function AddAccountInfo(props) {
   const urlParams = new URLSearchParams(window.location.search);
   const user_id = urlParams.get("id");
 
   const [username, setUsername] = useState();
   const [fname, setFname] = useState();
-  const [lanme, setLname] = useState();
+  const [lname, setLname] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -97,12 +121,14 @@ function AddAccountInfo(props) {
 
           <IonCardContent>
             <IonButton
-              href="http://localhost:8888/login"
               expand="block"
               color="success"
               strong="true"
+              onClick={() =>
+                postInfo(username, fname, lname, email, password, user_id)
+              }
             >
-              Connect
+              Submit
             </IonButton>
           </IonCardContent>
         </IonCard>

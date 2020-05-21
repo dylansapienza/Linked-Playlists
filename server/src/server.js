@@ -183,6 +183,13 @@ app.post("/api/recommendation/", async function (req, res) {
   res.send(output);
 });
 
+app.post("/accountcreation", (req, res) => {
+  //const p_info = JSON.parse(req.body);
+  console.log(req.body);
+
+  //TODO
+});
+
 app.get("/testAPI", (req, res) => {
   res.send("API is working properly");
 });
