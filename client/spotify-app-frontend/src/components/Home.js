@@ -12,6 +12,7 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonButton,
+  IonText,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
@@ -34,13 +35,20 @@ function Home(props) {
           </IonCardHeader>
 
           <IonCardContent class="ion-text-center ion-text-bold">
-            Spotify Playlist App allows you to add extended funtionality to your
-            playlists! We need to authententicate you first! Press the button
-            below to begin.
+            <IonText color="dark">
+              Spotify Playlist App allows you to add extended funtionality to
+              your playlists! We need to authententicate you first! Press the
+              button below to begin.
+            </IonText>
           </IonCardContent>
 
           <IonCardContent>
-            <IonButton class="" expand="block" color="success" strong="true">
+            <IonButton
+              href="http://localhost:8888/login"
+              expand="block"
+              color="success"
+              strong="true"
+            >
               Connect
             </IonButton>
           </IonCardContent>

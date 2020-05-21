@@ -10,6 +10,8 @@ const Playlist = require("./modules/Playlist");
 const apiCalls = require("./api/apicalls");
 
 //Need to add flags to avoid deprication MONGODB
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useUnifiedTopology", true);
 mongoose.connect(
   "mongodb+srv://dylansap:spotifyapp@spotifyapp-eey1y.mongodb.net/test?retryWrites=true&w=majority",
   { dbName: "spotifyapp" }
@@ -121,16 +123,15 @@ app.get("/callback", function (req, res) {
           user.save().then((result) => {
             console.log(result);
           });
-        });
 
-        // we can also pass the token to the browser to make requests from there
-        res.redirect(
-          "/#" +
-            querystring.stringify({
-              access_token: access_token,
-              refresh_token: refresh_token,
-            })
-        );
+          // we can also pass the token to the browser to make requests from there
+          res.redirect(
+            "http://localhost:3000/accountinfo" +
+              querystring.stringify({
+                id: body.id,
+              })
+          );
+        });
       } else {
         res.redirect(
           "/#" +
