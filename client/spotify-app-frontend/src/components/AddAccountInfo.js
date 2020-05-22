@@ -37,6 +37,7 @@ function postInfo(username, fname, lname, email, password, user_id) {
       },
     })
     .then((response) => {
+      window.location.replace(response.data);
       console.log(response);
     })
     .catch((error) => {

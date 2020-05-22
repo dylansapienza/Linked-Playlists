@@ -7,6 +7,8 @@ var querystring = require("querystring");
 var cookieParser = require("cookie-parser");
 const User = require("./modules/User");
 const Playlist = require("./modules/Playlist");
+const p_Info = require("./modules/P_Info");
+const bcrypt = require("bcrypt");
 const apiCalls = require("./api/apicalls");
 
 //Need to add flags to avoid deprication MONGODB
@@ -188,11 +190,27 @@ app.post("/api/recommendation/", async function (req, res) {
   res.send(output);
 });
 
-app.post("/accountcreation", (req, res) => {
+app.post("/accountcreation", async (req, res) => {
   //const p_info = JSON.parse(req.body);
   console.log(req.body);
 
-  //TODO
+  const password = req.body.password;
+
+  const hash = await bcrypt.hash(password, 10);
+
+  const p_info = new p_Info({
+    _id: new mongoose.Types.ObjectId(),
+    spotify_id: req.body.spotify_id,
+    username: req.body.username,
+    fname: req.body.fname,
+    lname: req.body.lname,
+    email: req.body.email,
+    password: hash,
+  });
+  p_info.save().then((result) => {
+    console.log(result);
+    res.send("http://localhost:3000/login?n=y");
+  });
 });
 
 app.get("/testAPI", (req, res) => {
