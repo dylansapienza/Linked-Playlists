@@ -12,10 +12,13 @@ const apiCalls = require("./api/apicalls");
 //Need to add flags to avoid deprication MONGODB
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
+
 mongoose.connect(
-  "mongodb+srv://dylansap:spotifyapp@spotifyapp-eey1y.mongodb.net/test?retryWrites=true&w=majority",
+  "mongodb://dylansap:spotifyapp@spotifyapp-shard-00-00-eey1y.mongodb.net:27017,spotifyapp-shard-00-01-eey1y.mongodb.net:27017,spotifyapp-shard-00-02-eey1y.mongodb.net:27017/test?ssl=true&replicaSet=spotifyapp-shard-0&authSource=admin&retryWrites=true&w=majority",
   { dbName: "spotifyapp" }
 );
+
+console.log(mongoose.connection.readyState);
 
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
@@ -147,6 +150,7 @@ app.get("/callback", function (req, res) {
 app.post("/api/playlist/", async (req, res) => {
   const queryemail = req.body.email;
   //const passkey = req.body.passkey; For Future Auth
+
   const output = await apiCalls.createPlaylist(queryemail);
 
   res.send(output);
@@ -170,6 +174,7 @@ app.post("/api/recommendation/", async function (req, res) {
   const rating = req.body.rating;
   const song_id = req.body.song_id;
 
+  console.log(mongoose.connection.readyState);
   const output = await apiCalls.addSongToPlaylist(
     song_id,
     host_id,
