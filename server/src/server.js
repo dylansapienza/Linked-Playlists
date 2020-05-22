@@ -7,7 +7,7 @@ var querystring = require("querystring");
 var cookieParser = require("cookie-parser");
 const User = require("./modules/User");
 const Playlist = require("./modules/Playlist");
-const p_Info = require("./modules/P_Info");
+const P_Info = require("./modules/P_Info");
 const bcrypt = require("bcrypt");
 const apiCalls = require("./api/apicalls");
 
@@ -198,7 +198,7 @@ app.post("/accountcreation", async (req, res) => {
 
   const hash = await bcrypt.hash(password, 10);
 
-  const p_info = new p_Info({
+  const p_info = new P_Info({
     _id: new mongoose.Types.ObjectId(),
     spotify_id: req.body.spotify_id,
     username: req.body.username,
@@ -213,8 +213,26 @@ app.post("/accountcreation", async (req, res) => {
   });
 });
 
-app.get("/testAPI", (req, res) => {
-  res.send("API is working properly");
+app.post("/login", async (req, res) => {
+  P_Info.findOne({ username: req.body.username })
+    .exec()
+    .then(async (doc) => {
+      console.log(doc);
+      const query_hash = doc.password;
+
+      const isLoggedIn = await bcrypt.compare(req.body.password, query_hash);
+      console.log(isLoggedIn);
+      if (isLoggedIn) {
+        //Valid!
+        //Respond with Login Session w/ Username
+        //Redirect to homepage
+        //Using Document.id as login cookie, should probably change this to something more secure
+        res.send(doc.id);
+      } else {
+        //Invalid
+        //try again
+      }
+    });
 });
 
 app.get("/refresh_token", function (req, res) {

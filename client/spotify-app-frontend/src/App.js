@@ -13,6 +13,8 @@ import "./App.css";
 import Home from "./components/Home";
 import AddAccountInfo from "./components/AddAccountInfo";
 import MyPlaylists from "./components/MyPlaylists";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
 
 // const Menu = ({ history }) => {
 //   <IonMenu>
@@ -44,7 +46,9 @@ class App extends React.Component {
         <IonApp>
           <Route exact path="/" component={Home} />
           <Route path="/accountinfo" component={AddAccountInfo} />
+          <Route path="/login" component={Login} />
           <Route path="/playlists" component={MyPlaylists} />
+          <Route path="/dashboard" component={Dashboard} />
         </IonApp>
       </BrowserRouter>
     );

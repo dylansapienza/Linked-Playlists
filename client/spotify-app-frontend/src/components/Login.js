@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 import axios from "axios";
 import {
   IonApp,
@@ -18,40 +19,37 @@ import {
   IonItem,
   IonInput,
   IonItemDivider,
+  IonToast,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
-function postInfo(username, fname, lname, email, password, user_id) {
+function postInfo(username, password) {
   const p_info = {
-    spotify_id: user_id,
     username: username,
-    fname: fname,
-    lname: lname,
-    email: email,
     password: password,
   };
   axios
-    .post("http://localhost:8888/accountcreation", p_info, {
+    .post("http://localhost:8888/login", p_info, {
       headers: {
         "Content-Type": "application/json",
       },
     })
     .then((response) => {
-      window.location.replace(response.data);
+      //window.location.replace(response.data);
+      Cookies.set("key", " ");
+      Cookies.set("key", response.data);
+      window.location.replace("http://localhost:3000/dashboard");
     })
     .catch((error) => {
       console.log(error);
     });
 }
 
-function AddAccountInfo(props) {
+function Login(props) {
   const urlParams = new URLSearchParams(window.location.search);
-  const user_id = urlParams.get("id");
+  const newacc = urlParams.get("n");
 
   const [username, setUsername] = useState();
-  const [fname, setFname] = useState();
-  const [lname, setLname] = useState();
-  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
   return (
@@ -64,16 +62,11 @@ function AddAccountInfo(props) {
       <IonContent>
         <IonCard>
           <IonCardHeader>
-            <IonCardTitle class="ion-text-center">
-              Account Creation
-            </IonCardTitle>
+            <IonCardTitle class="ion-text-center">Login</IonCardTitle>
           </IonCardHeader>
 
           <IonCardContent class="ion-text-center ion-text-bold">
-            <IonText color="dark">
-              We found your associated spotify account. To register we need to
-              know a little bit more about you first.
-            </IonText>
+            <IonText color="dark">Enter Your Account Information</IonText>
             <IonList inset="true">
               <IonItem>
                 <IonInput
@@ -81,30 +74,6 @@ function AddAccountInfo(props) {
                   placeholder="Username"
                   required="true"
                   onIonChange={(e) => setUsername(e.detail.value)}
-                ></IonInput>
-              </IonItem>
-              <IonItem>
-                <IonInput
-                  value={fname}
-                  placeholder="First Name"
-                  onIonChange={(e) => setFname(e.detail.value)}
-                ></IonInput>
-              </IonItem>
-              <IonItem>
-                <IonInput
-                  value={lname}
-                  placeholder="Last Name"
-                  onIonChange={(e) => setLname(e.detail.value)}
-                ></IonInput>
-              </IonItem>
-              <IonItem>
-                <IonInput
-                  value={email}
-                  inputmode="email"
-                  pattern="email"
-                  required="true"
-                  placeholder="Email Address"
-                  onIonChange={(e) => setEmail(e.detail.value)}
                 ></IonInput>
               </IonItem>
               <IonItem>
@@ -124,11 +93,9 @@ function AddAccountInfo(props) {
               expand="block"
               color="success"
               strong="true"
-              onClick={() =>
-                postInfo(username, fname, lname, email, password, user_id)
-              }
+              onClick={() => postInfo(username, password)}
             >
-              Submit
+              Login
             </IonButton>
           </IonCardContent>
         </IonCard>
@@ -136,4 +103,4 @@ function AddAccountInfo(props) {
     </IonPage>
   );
 }
-export default AddAccountInfo;
+export default Login;
