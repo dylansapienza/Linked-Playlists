@@ -253,4 +253,53 @@ module.exports = {
       }, 3000);
     });
   },
+  getPlaylistInfo: async function getPlaylistInfo(
+    playlist_id,
+    access_token,
+    refresh_token
+  ) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log(playlist_id);
+        console.log(access_token);
+        console.log(refresh_token);
+
+        var headers = {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + access_token,
+        };
+
+        var options = {
+          url: "https://api.spotify.com/v1/playlists/" + playlist_id,
+          headers: headers,
+        };
+
+        async function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            resolve(body);
+          } else if (response.statusCode === 401) {
+            let result = await module.exports.refreshToken(refresh_token);
+            if (result === true) {
+              User.findOne({ refresh_token: refresh_token })
+                .exec()
+                .then((doc2) => {
+                  console.log(doc2);
+                  const new_token = doc2.access_token;
+                  module.exports.getPlaylistInfo(
+                    playlist_id,
+                    new_token,
+                    refresh_token
+                  );
+                });
+            } else {
+              resolve("Could not refresh access token!");
+            }
+          }
+        }
+
+        request(options, callback);
+      }, 3000);
+    });
+  },
 };

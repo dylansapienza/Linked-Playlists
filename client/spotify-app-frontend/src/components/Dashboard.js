@@ -14,6 +14,10 @@ import {
   IonCardSubtitle,
   IonButton,
   IonText,
+  IonMenu,
+  IonList,
+  IonItem,
+  menuController,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
@@ -25,6 +29,22 @@ function Dashboard() {
           <IonTitle>{Cookies.get("key")}</IonTitle>
         </IonToolbar>
       </IonHeader>
+      <IonMenu side="start" menuId="custom" className="my-custom-menu">
+        <IonHeader>
+          <IonToolbar color="tertiary">
+            <IonTitle>Custom Menu</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonList>
+            <IonItem>Menu Item</IonItem>
+            <IonItem>Menu Item</IonItem>
+            <IonItem>Menu Item</IonItem>
+            <IonItem>Menu Item</IonItem>
+            <IonItem>Menu Item</IonItem>
+          </IonList>
+        </IonContent>
+      </IonMenu>
     </IonPage>
   );
 }

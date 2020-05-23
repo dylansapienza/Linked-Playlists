@@ -235,6 +235,34 @@ app.post("/login", async (req, res) => {
     });
 });
 
+app.post("/getPlaylists", async (req, res) => {
+  function sendGoods(playlist_id, access_token, refresh_token) {
+    console.log(playlist_id);
+    console.log(access_token);
+    console.log(refresh_token);
+  }
+  const user_token = req.body.user_token;
+  let spotify_id = "";
+  let playlist_id = "";
+  let access_token = "";
+  let refresh_token = "";
+
+  await P_Info.findById(user_token, function (err, p_info) {
+    spotify_id = p_info.spotify_id;
+  });
+
+  await Playlist.find({ id: spotify_id }, function (err, playlist) {
+    playlist_id = playlist.playlist_id;
+  });
+
+  await User.find({ id: spotify_id }, function (err, user) {
+    access_token = user.access_token;
+    refresh_token = user.refresh_token;
+  });
+
+  sendGoods(playlist_id, access_token, refresh_token);
+});
+
 app.get("/refresh_token", function (req, res) {
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
