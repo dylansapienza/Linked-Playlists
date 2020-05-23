@@ -10,7 +10,12 @@ const spotifySchema = mongoose.Schema({
   lname: String,
   access_token: String,
   refresh_token: String,
-  playlists: [String],
+  playlists: [
+    {
+      playlist_id: String,
+      playlist_name: String,
+    },
+  ],
   friends: [String],
 });
 

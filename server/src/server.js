@@ -141,6 +141,8 @@ app.get("/callback", function (req, res) {
             access_token: access_token,
             refresh_token: refresh_token,
             email: body.email,
+            playlists: [],
+            friends: [],
           });
           userdata.save(function (err) {
             if (err) return console.log(err);
@@ -167,10 +169,13 @@ app.get("/callback", function (req, res) {
 });
 
 app.post("/api/playlist/", async (req, res) => {
-  const queryemail = req.body.email;
+  const doc_id = req.body.token;
+  const playlist_name = req.body.p_name;
+
+  console.log(doc_id, playlist_name);
   //const passkey = req.body.passkey; For Future Auth
 
-  const output = await apiCalls.createPlaylist(queryemail);
+  const output = await apiCalls.createPlaylist(doc_id, playlist_name);
 
   res.send(output);
 });
@@ -215,9 +220,6 @@ app.post("/accountcreation", async (req, res) => {
 
   const hash = await bcrypt.hash(password, 10);
 
-  {
-  }
-
   UserData.findOneAndUpdate(
     { spotify_id: req.body.spotify_id },
     {
@@ -251,7 +253,7 @@ app.post("/accountcreation", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  P_Info.findOne({ username: req.body.username })
+  UserData.findOne({ username: req.body.username })
     .exec()
     .then(async (doc) => {
       console.log(doc);
@@ -273,31 +275,12 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/getPlaylists", async (req, res) => {
-  function sendGoods(playlist_id, access_token, refresh_token) {
-    console.log(playlist_id);
-    console.log(access_token);
-    console.log(refresh_token);
-  }
   const user_token = req.body.user_token;
-  let spotify_id = "";
-  let playlist_id = "";
-  let access_token = "";
-  let refresh_token = "";
 
-  await P_Info.findById(user_token, function (err, p_info) {
-    spotify_id = p_info.spotify_id;
+  UserData.findById(user_token, function (err, userdata) {
+    console.log(userdata.playlists);
+    res.send(userdata.playlists);
   });
-
-  await Playlist.find({ id: spotify_id }, function (err, playlist) {
-    playlist_id = playlist.playlist_id;
-  });
-
-  await User.find({ id: spotify_id }, function (err, user) {
-    access_token = user.access_token;
-    refresh_token = user.refresh_token;
-  });
-
-  sendGoods(playlist_id, access_token, refresh_token);
 });
 
 app.get("/refresh_token", function (req, res) {
