@@ -8,6 +8,7 @@ var cookieParser = require("cookie-parser");
 const User = require("./modules/User");
 const Playlist = require("./modules/Playlist");
 const P_Info = require("./modules/P_Info");
+const UserData = require("./modules/UserData");
 const bcrypt = require("bcrypt");
 const apiCalls = require("./api/apicalls");
 
@@ -117,16 +118,32 @@ app.get("/callback", function (req, res) {
           console.log(body);
 
           //Mongoose
-          const user = new User({
+          // const user = new User({
+          //   _id: new mongoose.Types.ObjectId(),
+          //   name: body.display_name,
+          //   access_token: access_token,
+          //   refresh_token: refresh_token,
+          //   id: body.id,
+          //   email: body.email,
+          // });
+          // user.save().then((result) => {
+          //   console.log(result);
+          // });
+
+          const userdata = new UserData({
             _id: new mongoose.Types.ObjectId(),
-            name: body.display_name,
+            spotify_id: body.id,
+            username: "",
+            password: "",
+            email: "",
+            fname: "",
+            lname: "",
             access_token: access_token,
             refresh_token: refresh_token,
-            id: body.id,
             email: body.email,
           });
-          user.save().then((result) => {
-            console.log(result);
+          userdata.save(function (err) {
+            if (err) return console.log(err);
           });
 
           // we can also pass the token to the browser to make requests from there
@@ -193,24 +210,44 @@ app.post("/api/recommendation/", async function (req, res) {
 app.post("/accountcreation", async (req, res) => {
   //const p_info = JSON.parse(req.body);
   console.log(req.body);
-
+  //req.body.spotify_id!
   const password = req.body.password;
 
   const hash = await bcrypt.hash(password, 10);
 
-  const p_info = new P_Info({
-    _id: new mongoose.Types.ObjectId(),
-    spotify_id: req.body.spotify_id,
-    username: req.body.username,
-    fname: req.body.fname,
-    lname: req.body.lname,
-    email: req.body.email,
-    password: hash,
+  {
+  }
+
+  UserData.findOneAndUpdate(
+    { spotify_id: req.body.spotify_id },
+    {
+      username: req.body.username,
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      password: hash,
+    }
+  ).exec(function (err, userdata) {
+    if (err) console.log(err);
+    else {
+      console.log(userdata);
+      res.send("http://localhost:3000/login?n=y");
+    }
   });
-  p_info.save().then((result) => {
-    console.log(result);
-    res.send("http://localhost:3000/login?n=y");
-  });
+
+  // const p_info = new P_Info({
+  //   _id: new mongoose.Types.ObjectId(),
+  //   spotify_id: req.body.spotify_id,
+  //   username: req.body.username,
+  //   fname: req.body.fname,
+  //   lname: req.body.lname,
+  //   email: req.body.email,
+  //   password: hash,
+  // });
+  // p_info.save().then((result) => {
+  //   console.log(result);
+  //   res.send("http://localhost:3000/login?n=y");
+  // });
 });
 
 app.post("/login", async (req, res) => {
