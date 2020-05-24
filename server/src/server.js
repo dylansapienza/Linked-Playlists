@@ -171,6 +171,7 @@ app.get("/callback", function (req, res) {
 app.post("/api/playlist/", async (req, res) => {
   const doc_id = req.body.token;
   const playlist_name = req.body.p_name;
+  const playlist_description = req.body.p_desc;
 
   console.log(doc_id, playlist_name);
   //const passkey = req.body.passkey; For Future Auth

@@ -39,7 +39,7 @@ function PlaylistItem(props) {
       }}
     >
       <IonAvatar slot="start">
-        <img src=""></img>
+        <img src="https://i.scdn.co/image/ab67706c0000da84359c374def8004a606b3fe3a"></img>
       </IonAvatar>
       <IonLabel>
         <h2>{props.playlist}</h2>

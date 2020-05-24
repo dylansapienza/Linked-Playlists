@@ -13,7 +13,10 @@ const spotifySchema = mongoose.Schema({
   playlists: [
     {
       playlist_id: String,
+      ownership: Number,
       playlist_name: String,
+      playlist_description: String,
+      playlist_cover: String,
     },
   ],
   friends: [String],

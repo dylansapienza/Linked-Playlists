@@ -80,7 +80,7 @@ module.exports = {
                     $push: {
                       playlists: {
                         playlist_id: plist_data.id,
-                        playlist_name: p_name,
+                        ownership: 1,
                       },
                     },
                   },
@@ -146,7 +146,7 @@ module.exports = {
             console.log(body);
             var new_access_token = body.access_token;
 
-            User.findOneAndUpdate(
+            UserData.findOneAndUpdate(
               { refresh_token: query_refresh },
               { $set: { access_token: new_access_token } },
               { new: true },
