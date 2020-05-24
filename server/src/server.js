@@ -176,7 +176,11 @@ app.post("/api/playlist/", async (req, res) => {
   console.log(doc_id, playlist_name);
   //const passkey = req.body.passkey; For Future Auth
 
-  const output = await apiCalls.createPlaylist(doc_id, playlist_name);
+  const output = await apiCalls.createPlaylist(
+    doc_id,
+    playlist_name,
+    playlist_description
+  );
 
   console.log(output);
 
