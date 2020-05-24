@@ -178,6 +178,8 @@ app.post("/api/playlist/", async (req, res) => {
 
   const output = await apiCalls.createPlaylist(doc_id, playlist_name);
 
+  console.log(output);
+
   res.send(output);
 });
 

@@ -34,9 +34,12 @@ import {
   IonIcon,
   IonModal,
   IonRadioGroup,
+  IonLoading,
+  IonProgressBar,
+  IonToast,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
-import { add } from "ionicons/icons";
+import { add, arrowDown, addCircle } from "ionicons/icons";
 import PlaylistItem from "./PlaylistItem";
 
 var MyPlaylists = ["Playlist 1", "Playlist 2", "Playlist 3"];
@@ -61,29 +64,35 @@ function getPlaylists() {
     });
 }
 
-function createPlaylist(p_name, p_desc) {
-  var token = Cookies.get("key");
-  var data = { token: token, p_name: p_name, p_desc: p_desc };
-  console.log(data);
-
-  axios
-    .post("http://localhost:8888/api/playlist", data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
 function MyPlaylist() {
   const [showModal, setShowModal] = useState(false);
   const [playlist_name, setPlaylist_Name] = useState();
   const [playlist_description, setPlaylist_Description] = useState();
+  const [isLoading, setLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  function createPlaylist(p_name, p_desc) {
+    var token = Cookies.get("key");
+    var data = { token: token, p_name: p_name, p_desc: p_desc };
+    console.log(data);
+    setLoading(true);
+    axios
+      .post("http://localhost:8888/api/playlist", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("RESPONSE:" + JSON.stringify(response));
+        setLoading(false);
+        setShowModal(false);
+        setShowToast(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }
 
   return (
     <IonPage>
@@ -115,18 +124,29 @@ function MyPlaylist() {
                   ></IonInput>
                 </IonItem>
               </IonList>
-              <IonButton
-                color="success"
-                expand="block"
-                onClick={() =>
-                  createPlaylist(playlist_name, playlist_description)
-                }
-              >
-                Create Playlist
-              </IonButton>
+              {isLoading ? (
+                <>
+                  <IonHeader>Creating Playlist...</IonHeader>
+                  <IonProgressBar type="indeterminate"></IonProgressBar>
+                </>
+              ) : (
+                <IonButton
+                  color="success"
+                  expand="block"
+                  onClick={() =>
+                    createPlaylist(playlist_name, playlist_description)
+                  }
+                >
+                  Create Playlist
+                </IonButton>
+              )}
             </IonCardContent>
           </IonCard>
-          <IonButton onClick={() => setShowModal(false)}>Close Modal</IonButton>
+          <IonFab horizontal="end" vertical="bottom">
+            <IonFabButton color="medium" onClick={() => setShowModal(false)}>
+              <IonIcon icon={arrowDown} />
+            </IonFabButton>
+          </IonFab>
         </IonModal>
         <IonCard>
           <IonListHeader>My Playlists</IonListHeader>
@@ -158,6 +178,13 @@ function MyPlaylist() {
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>
+        <IonToast
+          color="medium"
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(false)}
+          message="Your Playlist Has Been Created."
+          duration={3000}
+        />
       </IonContent>
     </IonPage>
   );

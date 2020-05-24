@@ -100,7 +100,7 @@ module.exports = {
                   let result = await module.exports.refreshToken(query_refresh);
                   //console.log(result);
                   if (result === true) {
-                    module.exports.createPlaylist(query_id);
+                    module.exports.createPlaylist(query_id, p_name);
                   } else {
                     resolve("Could not refresh access token!");
                   }
