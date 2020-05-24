@@ -27,8 +27,15 @@ import {
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
+  IonListHeader,
+  IonAvatar,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
+import PlaylistItem from "./PlaylistItem";
+
+var MyPlaylists = ["Playlist 1", "Playlist 2", "Playlist 3"];
+
+var FriendPlaylists = ["Playlist 4", "Playlist 5"];
 
 function getPlaylists() {
   var user_token = Cookies.get("key");
@@ -41,6 +48,7 @@ function getPlaylists() {
     })
     .then((response) => {
       console.log(response);
+      MyPlaylists = response;
     })
     .catch((error) => {
       console.log(error);
@@ -57,22 +65,18 @@ function MyPlaylist() {
       </IonHeader>
       <IonContent>
         <IonCard>
+          <IonListHeader>My Playlists</IonListHeader>
           <IonList>
-            <IonItem>
-              <IonLabel></IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Mega Man X</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>The Legend of Zelda</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Pac-Man</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Super Mario World</IonLabel>
-            </IonItem>
+            {MyPlaylists.map((playlist) => (
+              <PlaylistItem playlist={playlist} />
+            ))}
+          </IonList>
+
+          <IonListHeader>Following Playlists</IonListHeader>
+          <IonList>
+            {FriendPlaylists.map((playlist) => (
+              <PlaylistItem playlist={playlist} />
+            ))}
           </IonList>
           <IonCardContent>
             <IonButton
