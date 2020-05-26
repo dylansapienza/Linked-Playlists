@@ -281,9 +281,9 @@ module.exports = {
   ) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        console.log(playlist_id);
-        console.log(access_token);
-        console.log(refresh_token);
+        // console.log(playlist_id);
+        // console.log(access_token);
+        // console.log(refresh_token);
 
         var headers = {
           Accept: "application/json",
@@ -298,7 +298,7 @@ module.exports = {
 
         async function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
-            console.log(body);
+            //console.log(body);
             var jsonob = JSON.parse(body);
             var playlistData = {
               p_name: jsonob.name,
@@ -306,20 +306,20 @@ module.exports = {
               p_images: jsonob.images,
             };
 
+            resolve(playlistData);
+
             //console.log(playlistData);
 
-            UserData.findOneAndUpdate(
-              { _id: userCookie, "playlists.playlist_id": playlist_id },
-              {
-                $set: {
-                  "playlists.playlist_name": jsonob.name,
-                  playlist_description: jsonob.description,
-                  playlist_cover: jsonob.images,
-                },
-              }
-            );
-
-            resolve(playlistData);
+            // UserData.findOneAndUpdate(
+            //   { _id: userCookie, "playlists.playlist_id": playlist_id },
+            //   {
+            //     $set: {
+            //       "playlists.playlist_name": jsonob.name,
+            //       playlist_description: jsonob.description,
+            //       playlist_cover: jsonob.images,
+            //     },
+            //   }
+            // );
 
             return;
           } else if (response.statusCode === 401) {

@@ -285,7 +285,7 @@ app.post("/api/getPlaylists", async (req, res) => {
   const user_token = req.body.user_token;
 
   //Query Cookie ID
-  console.log(user_token);
+  //console.log(user_token);
 
   var playlistInfo = [];
   var p_data;
@@ -297,18 +297,27 @@ app.post("/api/getPlaylists", async (req, res) => {
     refresh_token = userdata.refresh_token;
     access_token = userdata.access_token;
     doc_id = userdata._id;
-    console.log(refresh_token);
+    //console.log(refresh_token);
   });
 
   //console.log(p_data);
   //console.log(Object.keys(p_data).length);
+
+  var playlists = Array(Object.keys(p_data)).fill(0);
+
   for (let i = 0; i < Object.keys(p_data).length; i++) {
     //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
     let p = JSON.parse(JSON.stringify(p_data[i].playlist_id));
-    console.log(
-      await apiCalls.getPlaylistInfo(doc_id, p, access_token, refresh_token)
+    playlists[i] = await apiCalls.getPlaylistInfo(
+      doc_id,
+      p,
+      access_token,
+      refresh_token
     );
   }
+
+  //console.log(playlists);
+  res.send(playlists);
 
   //console.log(playlistInfo);
 
