@@ -274,6 +274,7 @@ module.exports = {
     });
   },
   getPlaylistInfo: async function getPlaylistInfo(
+    userCookie,
     playlist_id,
     access_token,
     refresh_token
@@ -297,16 +298,40 @@ module.exports = {
 
         async function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
-            resolve(body);
+            console.log(body);
+            var jsonob = JSON.parse(body);
+            var playlistData = {
+              p_name: jsonob.name,
+              p_desc: jsonob.description,
+              p_images: jsonob.images,
+            };
+
+            //console.log(playlistData);
+
+            UserData.findOneAndUpdate(
+              { _id: userCookie, "playlists.playlist_id": playlist_id },
+              {
+                $set: {
+                  "playlists.playlist_name": jsonob.name,
+                  playlist_description: jsonob.description,
+                  playlist_cover: jsonob.images,
+                },
+              }
+            );
+
+            resolve(playlistData);
+
+            return;
           } else if (response.statusCode === 401) {
             let result = await module.exports.refreshToken(refresh_token);
             if (result === true) {
-              User.findOne({ refresh_token: refresh_token })
+              UserData.findOne({ refresh_token: refresh_token })
                 .exec()
                 .then((doc2) => {
                   console.log(doc2);
                   const new_token = doc2.access_token;
                   module.exports.getPlaylistInfo(
+                    userCookie,
                     playlist_id,
                     new_token,
                     refresh_token
