@@ -34,6 +34,9 @@ import {
   IonFabButton,
   IonProgressBar,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonVirtualScroll,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 import TrackItem from "../components/TrackItem";
@@ -71,20 +74,22 @@ function PlaylistItem(props) {
           <IonCardContent>
             <IonCardTitle>{props.playlist.p_name}</IonCardTitle>
             <IonCardSubtitle>{props.playlist.p_desc}</IonCardSubtitle>
-            {isLoading ? (
-              <>
-                <IonHeader>Getting Tracks...</IonHeader>
-                <IonProgressBar type="indeterminate"></IonProgressBar>
-              </>
-            ) : (
-              <IonList>
-                {tracks.map((track) => (
-                  <TrackItem track={track} />
-                ))}
-              </IonList>
-            )}
           </IonCardContent>
         </IonCard>
+        {isLoading ? (
+          <>
+            <IonHeader>Getting Tracks...</IonHeader>
+            <IonProgressBar type="indeterminate"></IonProgressBar>
+          </>
+        ) : (
+          <IonContent>
+            <IonList>
+              {tracks.map((track) => (
+                <TrackItem track={track} />
+              ))}
+            </IonList>
+          </IonContent>
+        )}
         <IonFab horizontal="end" vertical="bottom">
           <IonFabButton color="medium" onClick={() => setShowSongs(false)}>
             <IonIcon icon={arrowDown} />

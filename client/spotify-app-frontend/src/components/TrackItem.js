@@ -34,6 +34,7 @@ import {
   IonFabButton,
   IonProgressBar,
   IonIcon,
+  IonThumbnail,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
@@ -45,9 +46,9 @@ function TrackItem(props) {
     //     console.log(props.track);
     //   }}
     >
-      <IonAvatar slot="start">
+      <IonThumbnail slot="start">
         <img src={props.track.track.album.images[0].url}></img>
-      </IonAvatar>
+      </IonThumbnail>
       <IonLabel>
         <h2>{props.track.track.name}</h2>
         <h3>{props.track.track.artists[0].name}</h3>
