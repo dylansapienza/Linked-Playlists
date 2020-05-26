@@ -39,11 +39,11 @@ function PlaylistItem(props) {
       }}
     >
       <IonAvatar slot="start">
-        <img src="https://i.scdn.co/image/ab67706c0000da84359c374def8004a606b3fe3a"></img>
+        <img src="https://www.playlist.com/playlist-logo-1.png"></img>
       </IonAvatar>
       <IonLabel>
-        <h2>{props.playlist}</h2>
-        <h3>Subheading</h3>
+        <h2>{props.playlist.p_name}</h2>
+        <h3>{props.playlist.p_desc}</h3>
         <p>Last Add........</p>
       </IonLabel>
     </IonItem>

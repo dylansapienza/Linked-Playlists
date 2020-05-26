@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import {
@@ -42,27 +42,26 @@ import "@ionic/core/css/ionic.bundle.css";
 import { add, arrowDown, addCircle } from "ionicons/icons";
 import PlaylistItem from "./PlaylistItem";
 
-var MyPlaylists = ["Playlist 1", "Playlist 2", "Playlist 3"];
+// function getPlaylists() {
+//   var user_token = Cookies.get("key");
+//   var data = { user_token: user_token };
+//   axios
+//     .post("http://localhost:8888/api/getPlaylists", data, {
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     })
+//     .then((response) => {
+//       console.log(response);
+//       MyPlaylists = response;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
 
-var FriendPlaylists = ["Playlist 4", "Playlist 5"];
-
-function getPlaylists() {
-  var user_token = Cookies.get("key");
-  var data = { user_token: user_token };
-  axios
-    .post("http://localhost:8888/api/getPlaylists", data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => {
-      console.log(response);
-      MyPlaylists = response;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+//Clean this up and Work on some Caching System
+//Delete Playlist Function, Although NOT IMPORTANT NOW
 
 function MyPlaylist() {
   const [showModal, setShowModal] = useState(false);
@@ -70,6 +69,29 @@ function MyPlaylist() {
   const [playlist_description, setPlaylist_Description] = useState();
   const [isLoading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [isWaiting, setWaiting] = useState(true);
+  const [MyPlaylists, setPlaylists] = useState([]);
+  const [FriendPlaylists, setFriendPlaylists] = useState([]);
+
+  function getPlaylists() {
+    var user_token = Cookies.get("key");
+    var data = { user_token: user_token };
+    axios
+      .post("http://localhost:8888/api/getPlaylists", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setPlaylists(response.data);
+        console.log(MyPlaylist);
+        setWaiting(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function createPlaylist(p_name, p_desc) {
     var token = Cookies.get("key");
@@ -93,6 +115,10 @@ function MyPlaylist() {
         setLoading(false);
       });
   }
+
+  useEffect(() => {
+    getPlaylists();
+  }, []);
 
   return (
     <IonPage>
@@ -149,29 +175,29 @@ function MyPlaylist() {
           </IonFab>
         </IonModal>
         <IonCard>
-          <IonListHeader>My Playlists</IonListHeader>
-          <IonList>
-            {MyPlaylists.map((playlist) => (
-              <PlaylistItem playlist={playlist} />
-            ))}
-          </IonList>
+          {isWaiting ? (
+            <>
+              <IonHeader>Loading Playlists...</IonHeader>
+              <IonProgressBar type="indeterminate"></IonProgressBar>
+            </>
+          ) : (
+            <>
+              <IonListHeader>My Playlists</IonListHeader>
+              <IonList>
+                {MyPlaylists.map((playlist) => (
+                  <PlaylistItem playlist={playlist} />
+                ))}
+              </IonList>
+              <IonListHeader>Following Playlists</IonListHeader>
+              <IonList>
+                {FriendPlaylists.map((playlist) => (
+                  <PlaylistItem playlist={playlist} />
+                ))}
+              </IonList>
+            </>
+          )}
 
-          <IonListHeader>Following Playlists</IonListHeader>
-          <IonList>
-            {FriendPlaylists.map((playlist) => (
-              <PlaylistItem playlist={playlist} />
-            ))}
-          </IonList>
-          <IonCardContent>
-            <IonButton
-              expand="block"
-              color="success"
-              strong="true"
-              onClick={() => getPlaylists()}
-            >
-              Submit
-            </IonButton>
-          </IonCardContent>
+          <IonCardContent></IonCardContent>
         </IonCard>
         <IonFab horizontal="end" vertical="bottom">
           <IonFabButton color="success" onClick={() => setShowModal(true)}>
