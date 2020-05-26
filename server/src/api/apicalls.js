@@ -304,6 +304,7 @@ module.exports = {
               p_name: jsonob.name,
               p_desc: jsonob.description,
               p_images: jsonob.images,
+              p_id: playlist_id,
             };
 
             resolve(playlistData);
@@ -344,6 +345,66 @@ module.exports = {
         }
 
         request(options, callback);
+      }, 3000);
+    });
+  },
+
+  getTracks: async function getTracks(playlist_id, userCookie) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        var query_token;
+        var refresh_token;
+        UserData.findById(userCookie)
+          .exec()
+          .then((doc) => {
+            //console.log(doc);
+            query_token = doc.access_token;
+            refresh_token = doc.refresh_token;
+            var headers = {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + query_token,
+            };
+
+            var options = {
+              url: "https://api.spotify.com/v1/playlists/" + playlist_id,
+              headers: headers,
+            };
+
+            async function callback(error, response, body) {
+              if (!error && response.statusCode == 200) {
+                //console.log(body);
+                var jsonob = JSON.parse(body);
+                var tracks = {
+                  trackArray: jsonob.tracks,
+                };
+
+                resolve(tracks);
+
+                return;
+              } else if (response.statusCode === 401) {
+                let result = await module.exports.refreshToken(refresh_token);
+                if (result === true) {
+                  UserData.findOne({ refresh_token: refresh_token })
+                    .exec()
+                    .then((doc2) => {
+                      console.log(doc2);
+                      const new_token = doc2.access_token;
+                      module.exports.getPlaylistInfo(
+                        userCookie,
+                        playlist_id,
+                        new_token,
+                        refresh_token
+                      );
+                    });
+                } else {
+                  resolve("Could not refresh access token!");
+                }
+              }
+            }
+
+            request(options, callback);
+          });
       }, 3000);
     });
   },

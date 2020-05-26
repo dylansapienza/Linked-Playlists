@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { add, arrowDown, addCircle } from "ionicons/icons";
 import {
   IonApp,
   IonHeader,
@@ -27,26 +29,85 @@ import {
   IonItemOptions,
   IonItemSliding,
   IonAvatar,
+  IonModal,
+  IonFab,
+  IonFabButton,
+  IonProgressBar,
+  IonIcon,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
+import TrackItem from "../components/TrackItem";
 
 function PlaylistItem(props) {
+  const [isLoading, setLoading] = useState(true);
+  const [showSongs, setShowSongs] = useState(false);
+  const [tracks, setTracks] = useState([]);
+
+  function openPlaylist() {
+    setShowSongs(true);
+    var user_token = Cookies.get("key");
+    var data = { user_token: user_token, playlist_id: props.playlist.p_id };
+    axios
+      .post("http://localhost:8888/api/getTracks", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data.trackArray.items);
+        setTracks(response.data.trackArray.items);
+        console.log(tracks);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
-    <IonItem
-      button
-      onClick={() => {
-        console.log(props.playlist);
-      }}
-    >
-      <IonAvatar slot="start">
-        <img src="https://www.playlist.com/playlist-logo-1.png"></img>
-      </IonAvatar>
-      <IonLabel>
-        <h2>{props.playlist.p_name}</h2>
-        <h3>{props.playlist.p_desc}</h3>
-        <p>Last Add........</p>
-      </IonLabel>
-    </IonItem>
+    <>
+      <IonModal isOpen={showSongs} cssClass="my-custom-class">
+        <IonCard>
+          <IonCardContent>
+            <IonCardTitle>{props.playlist.p_name}</IonCardTitle>
+            <IonCardSubtitle>{props.playlist.p_desc}</IonCardSubtitle>
+            {isLoading ? (
+              <>
+                <IonHeader>Getting Tracks...</IonHeader>
+                <IonProgressBar type="indeterminate"></IonProgressBar>
+              </>
+            ) : (
+              <IonList>
+                {tracks.map((track) => (
+                  <TrackItem track={track} />
+                ))}
+              </IonList>
+            )}
+          </IonCardContent>
+        </IonCard>
+        <IonFab horizontal="end" vertical="bottom">
+          <IonFabButton color="medium" onClick={() => setShowSongs(false)}>
+            <IonIcon icon={arrowDown} />
+          </IonFabButton>
+        </IonFab>
+      </IonModal>
+
+      <IonItem
+        button
+        onClick={() => {
+          openPlaylist();
+        }}
+      >
+        <IonAvatar slot="start">
+          <img src="https://i.etsystatic.com/5302623/r/il/92edd2/1963352064/il_570xN.1963352064_a17y.jpg"></img>
+        </IonAvatar>
+        <IonLabel>
+          <h2>{props.playlist.p_name}</h2>
+          <h3>{props.playlist.p_desc}</h3>
+          <p>Last Add........</p>
+        </IonLabel>
+      </IonItem>
+    </>
   );
 }
 

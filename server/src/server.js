@@ -293,6 +293,8 @@ app.post("/api/getPlaylists", async (req, res) => {
   var access_token;
   var doc_id;
   await UserData.findById(user_token, async function (err, userdata) {
+    if (err) console.log(err);
+
     p_data = userdata.playlists;
     refresh_token = userdata.refresh_token;
     access_token = userdata.access_token;
@@ -300,10 +302,16 @@ app.post("/api/getPlaylists", async (req, res) => {
     //console.log(refresh_token);
   });
 
+  if (!p_data) {
+    console.log("NULL ERROR");
+  } else {
+    var playlists = Array(Object.keys(p_data)).fill(0);
+  }
+
   //console.log(p_data);
   //console.log(Object.keys(p_data).length);
 
-  var playlists = Array(Object.keys(p_data)).fill(0);
+  //var playlists = Array(Object.keys(p_data)).fill(0);
 
   for (let i = 0; i < Object.keys(p_data).length; i++) {
     //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
@@ -332,6 +340,19 @@ app.post("/api/getPlaylists", async (req, res) => {
   // Description
 
   //Return Track INFO? NO THANKS
+});
+
+app.post("/api/getTracks", async function (req, res) {
+  const user_token = req.body.user_token;
+  const playlist_id = req.body.playlist_id;
+
+  //console.log(playlist_id, user_token);
+
+  var tracks = await apiCalls.getTracks(playlist_id, user_token);
+
+  //console.log(tracks);
+
+  res.send(tracks);
 });
 
 app.get("/refresh_token", function (req, res) {
