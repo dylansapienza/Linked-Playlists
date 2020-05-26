@@ -37,6 +37,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonVirtualScroll,
+  IonThumbnail,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 import TrackItem from "../components/TrackItem";
@@ -103,9 +104,10 @@ function PlaylistItem(props) {
           openPlaylist();
         }}
       >
-        <IonAvatar slot="start">
-          <img src="https://i.etsystatic.com/5302623/r/il/92edd2/1963352064/il_570xN.1963352064_a17y.jpg"></img>
-        </IonAvatar>
+        <IonThumbnail slot="start">
+          <img src={props.playlist.p_images[0].url}></img>
+          {/* <img src="https://i.etsystatic.com/5302623/r/il/92edd2/1963352064/il_570xN.1963352064_a17y.jpg"></img> */}
+        </IonThumbnail>
         <IonLabel>
           <h2>{props.playlist.p_name}</h2>
           <h3>{props.playlist.p_desc}</h3>
