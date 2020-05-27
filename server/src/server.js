@@ -204,12 +204,14 @@ app.post("/api/recommendation/", async function (req, res) {
   const comment = req.body.comment;
   const rating = req.body.rating;
   const song_id = req.body.song_id;
+  const playlist_id = req.body.playlist_id;
 
   console.log(mongoose.connection.readyState);
   const output = await apiCalls.addSongToPlaylist(
     song_id,
     host_id,
     friend_id,
+    playlist_id,
     comment,
     rating
   );
@@ -315,10 +317,11 @@ app.post("/api/getPlaylists", async (req, res) => {
 
   for (let i = 0; i < Object.keys(p_data).length; i++) {
     //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
-    let p = JSON.parse(JSON.stringify(p_data[i].playlist_id));
+    let p = JSON.parse(JSON.stringify(p_data[i]));
     playlists[i] = await apiCalls.getPlaylistInfo(
       doc_id,
-      p,
+      p.playlist_id,
+      p.ownership,
       access_token,
       refresh_token
     );

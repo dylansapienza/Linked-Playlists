@@ -37,7 +37,10 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonVirtualScroll,
+  IonItemDivider,
   IonThumbnail,
+  IonTextarea,
+  IonRange,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 import TrackItem from "../components/TrackItem";
@@ -48,6 +51,39 @@ function PlaylistItem(props) {
   const [tracks, setTracks] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
   const [trackName, setTrackName] = useState("");
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
+
+  function addSong() {
+    var user_token = Cookies.get("key");
+    var data = {
+      host_id: user_token,
+      friend_id: "",
+      playlist_id: props.playlist.p_id,
+      comment: comment,
+      rating: rating,
+      song_id: trackName,
+    };
+
+    setLoading(true);
+
+    axios
+      .post("http://localhost:8888/api/recommendation", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        //Loading...
+        setLoading(false);
+        setShowAdd(false);
+        setShowSongs(false);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function openPlaylist() {
     setShowSongs(true);
@@ -85,6 +121,31 @@ function PlaylistItem(props) {
                   onIonChange={(e) => setTrackName(e.detail.value)}
                 ></IonInput>
               </IonItem>
+              {props.playlist.p_owner === 1 ? (
+                <></>
+              ) : (
+                <>
+                  <IonItem>
+                    <IonTextarea
+                      value={comment}
+                      placeholder="Comments"
+                      onIonChange={(e) => setComment(e.detail.value)}
+                    ></IonTextarea>
+                  </IonItem>
+                  <IonItem>
+                    <IonRange
+                      pin={true}
+                      value={rating}
+                      min={1}
+                      max={10}
+                      step={1}
+                      snaps={true}
+                      onIonChange={(e) => setRating(e.detail.value)}
+                      color="success"
+                    />
+                  </IonItem>
+                </>
+              )}
             </IonList>
             {isLoading ? (
               <>
@@ -95,7 +156,7 @@ function PlaylistItem(props) {
               <IonButton
                 color="success"
                 expand="block"
-                // onClick={() => ()}
+                onClick={() => addSong()}
               >
                 Add Track
               </IonButton>
