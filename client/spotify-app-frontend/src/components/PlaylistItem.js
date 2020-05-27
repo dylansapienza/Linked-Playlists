@@ -46,6 +46,8 @@ function PlaylistItem(props) {
   const [isLoading, setLoading] = useState(true);
   const [showSongs, setShowSongs] = useState(false);
   const [tracks, setTracks] = useState([]);
+  const [showAdd, setShowAdd] = useState(false);
+  const [trackName, setTrackName] = useState("");
 
   function openPlaylist() {
     setShowSongs(true);
@@ -70,6 +72,43 @@ function PlaylistItem(props) {
 
   return (
     <>
+      <IonModal isOpen={showAdd} cssClass="my-custom-class">
+        <IonCard>
+          <IonCardTitle>Add Song to {props.playlist.p_name}</IonCardTitle>
+          <IonCardContent>
+            <IonList inset="true">
+              <IonItem>
+                <IonInput
+                  value={trackName}
+                  placeholder="Track Name"
+                  required="true"
+                  onIonChange={(e) => setTrackName(e.detail.value)}
+                ></IonInput>
+              </IonItem>
+            </IonList>
+            {isLoading ? (
+              <>
+                <IonHeader>Adding Song...</IonHeader>
+                <IonProgressBar type="indeterminate"></IonProgressBar>
+              </>
+            ) : (
+              <IonButton
+                color="success"
+                expand="block"
+                // onClick={() => ()}
+              >
+                Add Track
+              </IonButton>
+            )}
+          </IonCardContent>
+        </IonCard>
+        <IonFab horizontal="end" vertical="bottom">
+          <IonFabButton color="medium" onClick={() => setShowAdd(false)}>
+            <IonIcon icon={arrowDown} />
+          </IonFabButton>
+        </IonFab>
+      </IonModal>
+
       <IonModal isOpen={showSongs} cssClass="my-custom-class">
         <IonCard>
           <IonCardContent>
@@ -91,6 +130,12 @@ function PlaylistItem(props) {
             </IonList>
           </IonContent>
         )}
+
+        <IonFab horizontal="start" vertical="bottom">
+          <IonFabButton color="success" onClick={() => setShowAdd(true)}>
+            <IonIcon icon={add} />
+          </IonFabButton>
+        </IonFab>
         <IonFab horizontal="end" vertical="bottom">
           <IonFabButton color="medium" onClick={() => setShowSongs(false)}>
             <IonIcon icon={arrowDown} />
