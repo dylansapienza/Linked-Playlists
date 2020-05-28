@@ -29,11 +29,12 @@ module.exports = {
       setTimeout(() => {
         //Find User Based Upon their doc_id
         console.log(query_id);
+        var query_userid;
         UserData.findById(query_id)
           .exec()
           .then((doc) => {
             console.log(doc);
-            const query_userid = doc.spotify_id;
+            query_userid = doc.spotify_id;
             const query_token = doc.access_token;
             const query_name = doc.fname;
             const query_refresh = doc.refresh_token;
@@ -85,6 +86,7 @@ module.exports = {
                       playlists: {
                         playlist_id: plist_data.id,
                         ownership: 1,
+                        owner_id: query_userid,
                         playlist_name: "",
                         playlist_description: "",
                         playlist_cover: "",

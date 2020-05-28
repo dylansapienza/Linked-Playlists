@@ -53,6 +53,7 @@ function PlaylistItem(props) {
   const [trackName, setTrackName] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
+  const [imgExists, setExists] = useState(false);
 
   function addSong() {
     var user_token = Cookies.get("key");
@@ -210,10 +211,17 @@ function PlaylistItem(props) {
           openPlaylist();
         }}
       >
-        <IonThumbnail slot="start">
-          <img src={props.playlist.p_images[0].url}></img>
-          {/* <img src="https://i.etsystatic.com/5302623/r/il/92edd2/1963352064/il_570xN.1963352064_a17y.jpg"></img> */}
-        </IonThumbnail>
+        {props.playlist.p_images ? (
+          <IonThumbnail slot="start">
+            {props.playlist.p_images[0] ? (
+              <img src={props.playlist.p_images[0].url}></img>
+            ) : (
+              <img src="https://i.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg"></img>
+            )}
+          </IonThumbnail>
+        ) : (
+          <div></div>
+        )}
         <IonLabel>
           <h2>{props.playlist.p_name}</h2>
           <h3>{props.playlist.p_desc}</h3>
