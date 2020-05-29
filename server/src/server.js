@@ -130,10 +130,18 @@ app.get("/callback", function (req, res) {
           //   console.log(result);
           // });
 
+          var pp_data;
+
+          if (body.images[0]) {
+            pp_data = body.images[0].url;
+          } else {
+            pp_data = "";
+          }
+
           const userdata = new UserData({
             _id: new mongoose.Types.ObjectId(),
             spotify_id: body.id,
-            profile_picture: body.images[0].url,
+            profile_picture: pp_data,
             username: "",
             password: "",
             email: "",

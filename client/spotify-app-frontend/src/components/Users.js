@@ -85,11 +85,13 @@ function Users(params) {
         </IonCard>
       </IonHeader>
       {UserData !== [] ? (
-        <IonList>
-          {UserData.map((user) => (
-            <UserElement user={user} />
-          ))}
-        </IonList>
+        <IonContent>
+          <IonList>
+            {UserData.map((user) => (
+              <UserElement user={user} />
+            ))}
+          </IonList>
+        </IonContent>
       ) : (
         <IonCard></IonCard>
       )}
