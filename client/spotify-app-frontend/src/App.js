@@ -15,6 +15,7 @@ import AddAccountInfo from "./components/AddAccountInfo";
 import MyPlaylists from "./components/MyPlaylists";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import Users from "./components/Users";
 
 // const Menu = ({ history }) => {
 //   <IonMenu>
@@ -49,6 +50,7 @@ class App extends React.Component {
           <Route path="/login" component={Login} />
           <Route path="/playlists" component={MyPlaylists} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/users" component={Users} />
         </IonApp>
       </BrowserRouter>
     );

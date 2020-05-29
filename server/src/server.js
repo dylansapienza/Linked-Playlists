@@ -17,7 +17,7 @@ mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 
 mongoose.connect(
-  "mongodb://dylansap:spotifyapp@spotifyapp-shard-00-00-eey1y.mongodb.net:27017,spotifyapp-shard-00-01-eey1y.mongodb.net:27017,spotifyapp-shard-00-02-eey1y.mongodb.net:27017/test?ssl=true&replicaSet=spotifyapp-shard-0&authSource=admin&retryWrites=true&w=majority",
+  "mongodb://dylansap:spotifyapp>@spotifyapp-shard-00-00-eey1y.mongodb.net:27017,spotifyapp-shard-00-01-eey1y.mongodb.net:27017,spotifyapp-shard-00-02-eey1y.mongodb.net:27017/test?ssl=true&replicaSet=spotifyapp-shard-0&authSource=admin&retryWrites=true&w=majority",
   { dbName: "spotifyapp" }
 );
 
@@ -133,6 +133,7 @@ app.get("/callback", function (req, res) {
           const userdata = new UserData({
             _id: new mongoose.Types.ObjectId(),
             spotify_id: body.id,
+            profile_picture: body.images[0].url,
             username: "",
             password: "",
             email: "",
@@ -356,6 +357,21 @@ app.post("/api/getTracks", async function (req, res) {
   //console.log(tracks);
 
   res.send(tracks);
+});
+
+app.post("/api/users", async function (req, res) {
+  const searchquery = req.body.searchquery;
+
+  UserData.find(
+    { username: { $regex: ".*" + searchquery + ".*", $options: "i" } },
+    { _id: 0, password: 0, access_token: 0, refresh_token: 0, spotify_id: 0 },
+    function (err, users) {
+      if (err) console.log(err);
+      else {
+        res.send(users);
+      }
+    }
+  );
 });
 
 app.get("/refresh_token", function (req, res) {
