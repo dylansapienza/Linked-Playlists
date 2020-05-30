@@ -302,6 +302,7 @@ module.exports = {
               p_images: jsonob.images,
               p_id: playlist_id,
               p_owner: ownership,
+              p_spotify_id: jsonob.owner.id,
             };
 
             resolve(playlistData);

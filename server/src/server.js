@@ -293,10 +293,23 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/api/getPlaylists", async (req, res) => {
-  const user_token = req.body.user_token;
+  var user_token;
 
+  if (req.body.username) {
+    var username = req.body.username;
+    await UserData.findOne({ username: username }, async function (
+      err,
+      userinfo
+    ) {
+      user_token = userinfo._id;
+    });
+  } else {
+    user_token = req.body.user_token;
+  }
   //Query Cookie ID
   //console.log(user_token);
+
+  console.log("UserTOKEN:" + user_token);
 
   var playlistInfo = [];
   var p_data;
@@ -355,7 +368,19 @@ app.post("/api/getPlaylists", async (req, res) => {
 });
 
 app.post("/api/getTracks", async function (req, res) {
-  const user_token = req.body.user_token;
+  var user_token;
+  if (req.body.username) {
+    var username = req.body.username;
+    await UserData.findOne({ spotify_id: username }, async function (
+      err,
+      userinfo
+    ) {
+      user_token = userinfo._id;
+    });
+  } else {
+    user_token = req.body.user_token;
+  }
+
   const playlist_id = req.body.playlist_id;
 
   //console.log(playlist_id, user_token);
