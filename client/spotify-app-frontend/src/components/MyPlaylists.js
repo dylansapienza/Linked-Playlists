@@ -74,6 +74,7 @@ function MyPlaylist() {
   const [FriendPlaylists, setFriendPlaylists] = useState([]);
 
   function getPlaylists() {
+    Cookies.set("discovery", "n");
     var user_token = Cookies.get("key");
     var data = { user_token: user_token };
     axios

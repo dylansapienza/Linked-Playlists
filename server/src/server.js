@@ -294,6 +294,11 @@ app.post("/login", async (req, res) => {
 
 app.post("/api/getPlaylists", async (req, res) => {
   var user_token;
+  var playlistInfo = [];
+  var p_data;
+  var refresh_token;
+  var access_token;
+  var doc_id;
 
   if (req.body.username) {
     var username = req.body.username;
@@ -304,6 +309,39 @@ app.post("/api/getPlaylists", async (req, res) => {
     ) {
       user_token = userinfo._id;
       console.log("USER TOKEN RECEIVED: ", user_token);
+      await UserData.findById(user_token, async function (err, userdata) {
+        p_data = userdata.playlists;
+        refresh_token = userdata.refresh_token;
+        access_token = userdata.access_token;
+        doc_id = userdata._id;
+        //console.log(refresh_token);
+      });
+
+      if (!p_data) {
+        console.log("NULL ERROR");
+      } else {
+        var playlists = Array(Object.keys(p_data)).fill(0);
+      }
+
+      //console.log(p_data);
+      //console.log(Object.keys(p_data).length);
+
+      //var playlists = Array(Object.keys(p_data)).fill(0);
+
+      for (let i = 0; i < Object.keys(p_data).length; i++) {
+        //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
+        let p = JSON.parse(JSON.stringify(p_data[i]));
+        playlists[i] = await apiCalls.getPlaylistInfo(
+          doc_id,
+          p.playlist_id,
+          p.ownership,
+          access_token,
+          refresh_token
+        );
+      }
+
+      //console.log(playlists);
+      res.send(playlists);
     });
   } else {
     user_token = req.body.user_token;
@@ -313,11 +351,6 @@ app.post("/api/getPlaylists", async (req, res) => {
 
   console.log("UserTOKEN:" + user_token);
 
-  var playlistInfo = [];
-  var p_data;
-  var refresh_token;
-  var access_token;
-  var doc_id;
   await UserData.findById(user_token, async function (err, userdata) {
     p_data = userdata.playlists;
     refresh_token = userdata.refresh_token;
@@ -405,6 +438,44 @@ app.post("/api/users", async function (req, res) {
       }
     }
   );
+});
+
+app.post("/api/friendrequest", async function (req, res) {
+  //Sender ID will allow us to use their token_id
+  const sender_id = req.body.user_token;
+  //For Reciever We will need to use a findOne query
+  const reciever_id = req.body.username;
+
+  let doc = await UserData.findOneAndUpdate(
+    { _id: sender_id },
+    { friend_id: reciever_id, status: 2 }
+  );
+
+  UserData.findOneAndUpdate(
+    { username: reciever_id },
+    { friend_id: doc.username, status: 0 }
+  );
+
+  res.send("Success!");
+});
+
+app.post("/api/frienddecline", async function (req, res) {});
+
+app.post("/api/friendaccept", async function (req, res) {
+  const user_id = req.body.user_token;
+  const friend = req.body.username;
+
+  let doc = await UserData.findOneAndUpdate(
+    { _id: user_id, friend_id: friend },
+    { status: 1 }
+  );
+
+  UserData.findOneAndUpdate(
+    { username: friend, friend_id: doc.username },
+    { status: 1 }
+  );
+
+  res.send("Success!");
 });
 
 app.get("/refresh_token", function (req, res) {

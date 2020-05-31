@@ -91,6 +91,9 @@ function PlaylistItem(props) {
     var user_token;
     var data;
     //For Security if Coming from discovery page, dont get other users token
+    //This is a bug
+    //Discovery is remaining set after user navigates away from discovery.
+    //Should set discovery to N when on localhost:3000/playlists?
     if (Cookies.get("discovery") === "y") {
       var username = props.playlist.p_spotify_id;
       data = { username: username, playlist_id: props.playlist.p_id };

@@ -21,7 +21,12 @@ const spotifySchema = mongoose.Schema({
       playlist_cover: String,
     },
   ],
-  friends: [String],
+  friends: [
+    {
+      friend_id: String,
+      status: Number,
+    },
+  ],
 });
 
 module.exports = mongoose.model("UserData", spotifySchema);
