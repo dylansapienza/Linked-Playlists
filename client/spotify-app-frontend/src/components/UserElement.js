@@ -37,12 +37,18 @@ function UserElement(props) {
   const [userModal, setUserModal] = useState(false);
   const [Waiting, setWaiting] = useState(false);
   const [userPlaylists, setUserPlaylists] = useState([]);
+  const [isFollowing, setFollowing] = useState(false);
+
+  function followUser() {
+    console.log(props.user.username);
+  }
 
   function getPlaylists() {
     setUserModal(true);
     Cookies.set("discovery", "y");
     var username = props.user.username;
     var data = { username: username };
+    console.log(data);
     axios
       .post("http://localhost:8888/api/getPlaylists", data, {
         headers: {
@@ -75,6 +81,15 @@ function UserElement(props) {
             <IonCardTitle>
               {props.user.fname} {props.user.lname}
             </IonCardTitle>
+            <IonButton
+              expand="block"
+              color="medium"
+              onClick={() => {
+                followUser();
+              }}
+            >
+              Follow
+            </IonButton>
           </IonItem>
           <IonListHeader>My Playlists</IonListHeader>
           <IonList>

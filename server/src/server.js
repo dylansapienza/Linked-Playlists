@@ -17,7 +17,7 @@ mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 
 mongoose.connect(
-  "mongodb://dylansap:spotifyapp>@spotifyapp-shard-00-00-eey1y.mongodb.net:27017,spotifyapp-shard-00-01-eey1y.mongodb.net:27017,spotifyapp-shard-00-02-eey1y.mongodb.net:27017/test?ssl=true&replicaSet=spotifyapp-shard-0&authSource=admin&retryWrites=true&w=majority",
+  "mongodb://dylansap:spotifyapp@spotifyapp-shard-00-00-eey1y.mongodb.net:27017,spotifyapp-shard-00-01-eey1y.mongodb.net:27017,spotifyapp-shard-00-02-eey1y.mongodb.net:27017/test?ssl=true&replicaSet=spotifyapp-shard-0&authSource=admin&retryWrites=true&w=majority",
   { dbName: "spotifyapp" }
 );
 
@@ -297,11 +297,13 @@ app.post("/api/getPlaylists", async (req, res) => {
 
   if (req.body.username) {
     var username = req.body.username;
+    console.log("USERNAME CALL:", username);
     await UserData.findOne({ username: username }, async function (
       err,
       userinfo
     ) {
       user_token = userinfo._id;
+      console.log("USER TOKEN RECEIVED: ", user_token);
     });
   } else {
     user_token = req.body.user_token;
@@ -317,8 +319,6 @@ app.post("/api/getPlaylists", async (req, res) => {
   var access_token;
   var doc_id;
   await UserData.findById(user_token, async function (err, userdata) {
-    if (err) console.log(err);
-
     p_data = userdata.playlists;
     refresh_token = userdata.refresh_token;
     access_token = userdata.access_token;
