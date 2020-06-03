@@ -94,13 +94,13 @@ function PlaylistItem(props) {
     //This is a bug
     //Discovery is remaining set after user navigates away from discovery.
     //Should set discovery to N when on localhost:3000/playlists?
-    if (Cookies.get("discovery") === "y") {
-      var username = props.playlist.p_spotify_id;
-      data = { username: username, playlist_id: props.playlist.p_id };
-    } else {
-      user_token = Cookies.get("key");
-      data = { user_token: user_token, playlist_id: props.playlist.p_id };
-    }
+    // if (Cookies.get("discovery") === "y") {
+    //   var username = props.playlist.p_spotify_id;
+    //   data = { username: username, playlist_id: props.playlist.p_id };
+    // } else {
+    user_token = Cookies.get("key");
+    data = { user_token: user_token, playlist_id: props.playlist.p_id };
+    //}
     axios
       .post("http://localhost:8888/api/getTracks", data, {
         headers: {

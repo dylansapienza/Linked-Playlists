@@ -293,59 +293,66 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/api/getPlaylists", async (req, res) => {
-  var user_token;
+  const user_token = req.body.user_token;
   var playlistInfo = [];
   var p_data;
   var refresh_token;
   var access_token;
   var doc_id;
 
-  if (req.body.username) {
-    var username = req.body.username;
-    console.log("USERNAME CALL:", username);
-    await UserData.findOne({ username: username }, async function (
-      err,
-      userinfo
-    ) {
-      user_token = userinfo._id;
-      console.log("USER TOKEN RECEIVED: ", user_token);
-      await UserData.findById(user_token, async function (err, userdata) {
-        p_data = userdata.playlists;
-        refresh_token = userdata.refresh_token;
-        access_token = userdata.access_token;
-        doc_id = userdata._id;
-        //console.log(refresh_token);
-      });
+  // if (req.body.username) {
+  //   var username = req.body.username;
+  //   console.log("USERNAME CALL:", username);
+  //   await UserData.findOne({ username: username }, async function (
+  //     err,
+  //     userinfo
+  //   ) {
+  //     user_token = userinfo._id;
+  // console.log("USER TOKEN RECEIVED: ", user_token);
+  // await UserData.findById(user_token, async function (err, userdata) {
+  //   p_data = userdata.playlists;
+  //   refresh_token = userdata.refresh_token;
+  //   access_token = userdata.access_token;
+  //   doc_id = userdata._id;
+  //   //console.log(refresh_token);
+  // });
 
-      if (!p_data) {
-        console.log("NULL ERROR");
-      } else {
-        var playlists = Array(Object.keys(p_data)).fill(0);
-      }
+  //console.log("USER TOKEN RECEIVED: ", user_token);
+  // await UserData.findById(user_token, async function (err, userdata) {
+  //   p_data = userdata.playlists;
+  //   refresh_token = userdata.refresh_token;
+  //   access_token = userdata.access_token;
+  //   doc_id = userdata._id;
 
-      //console.log(p_data);
-      //console.log(Object.keys(p_data).length);
+  //   if (!p_data) {
+  //     console.log("NULL ERROR");
+  //   } else {
+  //     var playlists = Array(Object.keys(p_data)).fill(0);
+  //   }
 
-      //var playlists = Array(Object.keys(p_data)).fill(0);
+  //   //console.log(p_data);
+  //   //console.log(Object.keys(p_data).length);
 
-      for (let i = 0; i < Object.keys(p_data).length; i++) {
-        //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
-        let p = JSON.parse(JSON.stringify(p_data[i]));
-        playlists[i] = await apiCalls.getPlaylistInfo(
-          doc_id,
-          p.playlist_id,
-          p.ownership,
-          access_token,
-          refresh_token
-        );
-      }
+  //   //var playlists = Array(Object.keys(p_data)).fill(0);
 
-      //console.log(playlists);
-      res.send(playlists);
-    });
-  } else {
-    user_token = req.body.user_token;
-  }
+  //   for (let i = 0; i < Object.keys(p_data).length; i++) {
+  //     //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
+  //     let p = JSON.parse(JSON.stringify(p_data[i]));
+  //     playlists[i] = await apiCalls.getPlaylistInfo(
+  //       doc_id,
+  //       p.playlist_id,
+  //       p.ownership,
+  //       access_token,
+  //       refresh_token
+  //     );
+  //   }
+
+  //   //console.log(playlists);
+  //   res.send(playlists);
+  // });
+  // } else {
+  //   user_token = req.body.user_token;
+  // }
   //Query Cookie ID
   //console.log(user_token);
 
@@ -356,34 +363,34 @@ app.post("/api/getPlaylists", async (req, res) => {
     refresh_token = userdata.refresh_token;
     access_token = userdata.access_token;
     doc_id = userdata._id;
+    if (!p_data) {
+      console.log("NULL ERROR");
+    } else {
+      var playlists = Array(Object.keys(p_data)).fill(0);
+    }
+
+    //console.log(p_data);
+    //console.log(Object.keys(p_data).length);
+
+    //var playlists = Array(Object.keys(p_data)).fill(0);
+
+    for (let i = 0; i < Object.keys(p_data).length; i++) {
+      //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
+      let p = JSON.parse(JSON.stringify(p_data[i]));
+      playlists[i] = await apiCalls.getPlaylistInfo(
+        doc_id,
+        p.playlist_id,
+        p.ownership,
+        access_token,
+        refresh_token
+      );
+    }
+
+    //console.log(playlists);
+    res.send(playlists);
+
     //console.log(refresh_token);
   });
-
-  if (!p_data) {
-    console.log("NULL ERROR");
-  } else {
-    var playlists = Array(Object.keys(p_data)).fill(0);
-  }
-
-  //console.log(p_data);
-  //console.log(Object.keys(p_data).length);
-
-  //var playlists = Array(Object.keys(p_data)).fill(0);
-
-  for (let i = 0; i < Object.keys(p_data).length; i++) {
-    //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
-    let p = JSON.parse(JSON.stringify(p_data[i]));
-    playlists[i] = await apiCalls.getPlaylistInfo(
-      doc_id,
-      p.playlist_id,
-      p.ownership,
-      access_token,
-      refresh_token
-    );
-  }
-
-  //console.log(playlists);
-  res.send(playlists);
 
   //console.log(playlistInfo);
 
@@ -401,18 +408,19 @@ app.post("/api/getPlaylists", async (req, res) => {
 });
 
 app.post("/api/getTracks", async function (req, res) {
-  var user_token;
-  if (req.body.username) {
-    var username = req.body.username;
-    await UserData.findOne({ spotify_id: username }, async function (
-      err,
-      userinfo
-    ) {
-      user_token = userinfo._id;
-    });
-  } else {
-    user_token = req.body.user_token;
-  }
+  // var user_token;
+  // if (req.body.username) {
+  //   var username = req.body.username;
+  //   await UserData.findOne({ spotify_id: username }, async function (
+  //     err,
+  //     userinfo
+  //   ) {
+  //     user_token = userinfo._id;
+  //   });
+  // } else {
+  //   user_token = req.body.user_token;
+  // }
+  const user_token = req.body.user_token;
 
   const playlist_id = req.body.playlist_id;
 
@@ -460,6 +468,26 @@ app.post("/api/friendrequest", async function (req, res) {
 });
 
 app.post("/api/frienddecline", async function (req, res) {});
+
+app.post("/api/getFriend", async function (req, res) {
+  const user_token = req.body.user_token;
+  const friend_id = req.body.username;
+  var isFriend = -1;
+
+  console.log("getfriend user_token", user_token);
+
+  let doc = await UserData.findOne({ _id: user_token });
+
+  console.log(doc);
+
+  for (var i = 0; i < doc.friend.length; i++) {
+    if (friend[i].friend_id === friend_id) {
+      isFriend = friend[i].status;
+    }
+  }
+
+  res.send(isFriend);
+});
 
 app.post("/api/friendaccept", async function (req, res) {
   const user_id = req.body.user_token;

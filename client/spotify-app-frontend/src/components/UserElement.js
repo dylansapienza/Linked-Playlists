@@ -28,6 +28,7 @@ import {
   IonIcon,
   IonThumbnail,
   IonListHeader,
+  IonSpinner,
 } from "@ionic/react";
 import { add, arrowDown, addCircle } from "ionicons/icons";
 import "@ionic/core/css/ionic.bundle.css";
@@ -37,13 +38,33 @@ function UserElement(props) {
   const [userModal, setUserModal] = useState(false);
   const [Waiting, setWaiting] = useState(false);
   const [userPlaylists, setUserPlaylists] = useState([]);
-  const [isFollowing, setFollowing] = useState(false);
+  const [isFriend, setFriend] = useState(<IonSpinner name="crescent" />);
 
   function followUser() {
     console.log(props.user.username);
   }
 
+  function getFriend() {
+    var user_token2 = Cookies.get("key");
+    var username2 = props.user.username;
+    var data2 = { user_token: user_token2, username: username2 };
+    axios
+      .post("http://localhost:8888/api/getFriend", data2, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   function getPlaylists() {
+    getFriend();
     setUserModal(true);
     Cookies.set("discovery", "y");
     var username = props.user.username;
@@ -66,6 +87,54 @@ function UserElement(props) {
       });
   }
 
+  var notFriends = (
+    <IonButton
+      expand="block"
+      color="medium"
+      onClick={() => {
+        followUser();
+      }}
+    >
+      + Friend
+    </IonButton>
+  );
+
+  var sendingFriend = (
+    <IonButton
+      expand="block"
+      color="medium"
+      onClick={() => {
+        console.log("Waiting!");
+      }}
+    >
+      Pending...
+    </IonButton>
+  );
+
+  var recievingFriend = (
+    <IonButton
+      expand="block"
+      color="medium"
+      onClick={() => {
+        console.log("Waiting!");
+      }}
+    >
+      Accept?
+    </IonButton>
+  );
+
+  var areFriends = (
+    <IonButton
+      expand="block"
+      color="success"
+      onClick={() => {
+        console.log("Waiting!");
+      }}
+    >
+      Friends
+    </IonButton>
+  );
+
   return (
     <>
       <IonModal isOpen={userModal} cssClass="my-custom-class">
@@ -81,15 +150,7 @@ function UserElement(props) {
             <IonCardTitle>
               {props.user.fname} {props.user.lname}
             </IonCardTitle>
-            <IonButton
-              expand="block"
-              color="medium"
-              onClick={() => {
-                followUser();
-              }}
-            >
-              Follow
-            </IonButton>
+            {isFriend}
           </IonItem>
           <IonListHeader>My Playlists</IonListHeader>
           <IonList>
