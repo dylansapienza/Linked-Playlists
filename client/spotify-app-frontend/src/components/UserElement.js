@@ -41,7 +41,23 @@ function UserElement(props) {
   const [isFriend, setFriend] = useState(<IonSpinner name="crescent" />);
 
   function followUser() {
-    console.log(props.user.username);
+    var user_token3 = Cookies.get("key");
+    var username3 = props.user.username;
+
+    var data3 = { user_token: user_token3, username: username3 };
+    axios
+      .post("http://localhost:8888/api/friendrequest", data3, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFriend(sendingFriend);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function getFriend() {
@@ -57,8 +73,20 @@ function UserElement(props) {
       .then((response) => {
         console.log(response);
         console.log(response.data.isFriend);
+        if (response.data.isFriend === 400) {
+          setFriend(selfUser);
+        }
         if (response.data.isFriend === -1) {
           setFriend(notFriends);
+        }
+        if (response.data.isFriend === 2) {
+          setFriend(sendingFriend);
+        }
+        if (response.data.isFriend === 0) {
+          setFriend(recievingFriend);
+        }
+        if (response.data.isFriend === 1) {
+          setFriend(areFriends);
         }
       })
       .catch((error) => {
@@ -136,6 +164,8 @@ function UserElement(props) {
       Friends
     </IonButton>
   );
+
+  var selfUser = <div></div>;
 
   return (
     <>

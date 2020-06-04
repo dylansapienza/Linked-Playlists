@@ -516,14 +516,21 @@ app.post("/api/friendrequest", async function (req, res) {
   //For Reciever We will need to use a findOne query
   const reciever_id = req.body.username;
 
+  console.log(sender_id, "is requesting", reciever_id, "to be friends");
+
+  var addtosender = { friend_id: reciever_id, status: 2 };
+
   let doc = await UserData.findOneAndUpdate(
     { _id: sender_id },
-    { friend_id: reciever_id, status: 2 }
+    { $push: { friends: addtosender } }
   );
 
-  UserData.findOneAndUpdate(
+  console.log(doc.username);
+  var addtoreciever = { friend_id: await doc.username, status: 0 };
+
+  await UserData.findOneAndUpdate(
     { username: reciever_id },
-    { friend_id: doc.username, status: 0 }
+    { $push: { friends: addtoreciever } }
   );
 
   res.send("Success!");
@@ -540,12 +547,17 @@ app.post("/api/getFriend", async function (req, res) {
 
   let doc = await UserData.findOne({ _id: user_token });
 
+  if ((await doc.username) === friend_id) {
+    res.send({ isFriend: 400 });
+    return;
+  }
+
   console.log(doc.friends);
 
   for (var i = 0; i < doc.friends.length; i++) {
     //throwing errors here!
-    if (friends[i].friend_id === friend_id) {
-      isFriend = friend[i].status;
+    if (doc.friends[i].friend_id === friend_id) {
+      isFriend = doc.friends[i].status;
     }
   }
   console.log(isFriend);
