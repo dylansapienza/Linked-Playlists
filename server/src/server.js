@@ -407,6 +407,68 @@ app.post("/api/getPlaylists", async (req, res) => {
   //Return Track INFO? NO THANKS
 });
 
+app.post("/api/getuserplaylists", async (req, res) => {
+  const username = req.body.username;
+  var playlistInfo = [];
+  var p_data;
+  var refresh_token;
+  var access_token;
+  var doc_id;
+
+  console.log("Fetching " + username + "'s Playlists");
+
+  await UserData.findOne({ username: username }, async function (
+    err,
+    userdata
+  ) {
+    p_data = userdata.playlists;
+    refresh_token = userdata.refresh_token;
+    access_token = userdata.access_token;
+    doc_id = userdata._id;
+    if (!p_data) {
+      console.log("NULL ERROR");
+    } else {
+      var playlists = Array(Object.keys(p_data)).fill(0);
+    }
+
+    //console.log(p_data);
+    //console.log(Object.keys(p_data).length);
+
+    //var playlists = Array(Object.keys(p_data)).fill(0);
+
+    for (let i = 0; i < Object.keys(p_data).length; i++) {
+      //console.log(i, ":", JSON.parse(JSON.stringify(p_data[i].playlist_id)));
+      let p = JSON.parse(JSON.stringify(p_data[i]));
+      playlists[i] = await apiCalls.getPlaylistInfo(
+        doc_id,
+        p.playlist_id,
+        p.ownership,
+        access_token,
+        refresh_token
+      );
+    }
+
+    //console.log(playlists);
+    res.send(playlists);
+
+    //console.log(refresh_token);
+  });
+
+  //console.log(playlistInfo);
+
+  //Return Playlist ID's to Update
+  //API Call to Spotify for Info
+
+  //Spotify Call Update The Data In DB
+
+  //Return Array of Objects
+  // Playlist Title
+  // Image Link
+  // Description
+
+  //Return Track INFO? NO THANKS
+});
+
 app.post("/api/getTracks", async function (req, res) {
   // var user_token;
   // if (req.body.username) {
@@ -474,19 +536,20 @@ app.post("/api/getFriend", async function (req, res) {
   const friend_id = req.body.username;
   var isFriend = -1;
 
-  console.log("getfriend user_token", user_token);
+  console.log("Checking if Token:", user_token, "is Friends with ", friend_id);
 
   let doc = await UserData.findOne({ _id: user_token });
 
-  console.log(doc);
+  console.log(doc.friends);
 
-  for (var i = 0; i < doc.friend.length; i++) {
-    if (friend[i].friend_id === friend_id) {
+  for (var i = 0; i < doc.friends.length; i++) {
+    //throwing errors here!
+    if (friends[i].friend_id === friend_id) {
       isFriend = friend[i].status;
     }
   }
-
-  res.send(isFriend);
+  console.log(isFriend);
+  res.send({ isFriend: isFriend });
 });
 
 app.post("/api/friendaccept", async function (req, res) {

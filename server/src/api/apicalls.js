@@ -332,6 +332,7 @@ module.exports = {
                   module.exports.getPlaylistInfo(
                     userCookie,
                     playlist_id,
+                    ownership,
                     new_token,
                     refresh_token
                   );

@@ -56,7 +56,10 @@ function UserElement(props) {
       })
       .then((response) => {
         console.log(response);
-        console.log(response.data);
+        console.log(response.data.isFriend);
+        if (response.data.isFriend === -1) {
+          setFriend(notFriends);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -66,12 +69,11 @@ function UserElement(props) {
   function getPlaylists() {
     getFriend();
     setUserModal(true);
-    Cookies.set("discovery", "y");
     var username = props.user.username;
     var data = { username: username };
     console.log(data);
     axios
-      .post("http://localhost:8888/api/getPlaylists", data, {
+      .post("http://localhost:8888/api/getuserplaylists", data, {
         headers: {
           "Content-Type": "application/json",
         },
