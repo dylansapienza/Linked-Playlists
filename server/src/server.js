@@ -569,13 +569,22 @@ app.post("/api/friendaccept", async function (req, res) {
   const friend = req.body.username;
 
   let doc = await UserData.findOneAndUpdate(
-    { _id: user_id, friend_id: friend },
-    { status: 1 }
+    { _id: user_id, "friends.friend_id": friend },
+    { $set: { "friends.$.status": 1 } }
   );
 
+  console.log(await doc.username);
+
   UserData.findOneAndUpdate(
-    { username: friend, friend_id: doc.username },
-    { status: 1 }
+    { username: friend, "friends.friend_id": await doc.username },
+    { $set: { "friends.$.status": 1 } },
+    function (err, doc2) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(doc2);
+      }
+    }
   );
 
   res.send("Success!");

@@ -60,6 +60,26 @@ function UserElement(props) {
       });
   }
 
+  function acceptFriend() {
+    var user_token4 = Cookies.get("key");
+    var username4 = props.user.username;
+
+    var data4 = { user_token: user_token4, username: username4 };
+    axios
+      .post("http://localhost:8888/api/friendaccept", data4, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setFriend(areFriends);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   function getFriend() {
     var user_token2 = Cookies.get("key");
     var username2 = props.user.username;
@@ -146,7 +166,7 @@ function UserElement(props) {
       expand="block"
       color="medium"
       onClick={() => {
-        console.log("Waiting!");
+        acceptFriend();
       }}
     >
       Accept?
@@ -158,7 +178,7 @@ function UserElement(props) {
       expand="block"
       color="success"
       onClick={() => {
-        console.log("Waiting!");
+        console.log("Friends");
       }}
     >
       Friends
