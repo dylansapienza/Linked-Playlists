@@ -73,16 +73,29 @@ function PlaylistItem(props) {
   );
 
   function addSong() {
-    var user_token = Cookies.get("key");
-    var data = {
-      host_id: user_token,
-      friend_id: "",
-      playlist_id: props.playlist.p_id,
-      comment: comment,
-      rating: rating,
-      song_id: trackName,
-    };
+    //Check if its a recommender or not to add song!
 
+    var user_token = Cookies.get("key");
+    var data;
+    if (props.playlist.p_owner == 2) {
+      data = {
+        host_id: props.playlist.p_spotify_id,
+        friend_id: user_token,
+        playlist_id: props.playlist.p_id,
+        comment: comment,
+        rating: rating,
+        song_id: trackName,
+      };
+    } else {
+      data = {
+        host_id: user_token,
+        friend_id: "",
+        playlist_id: props.playlist.p_id,
+        comment: comment,
+        rating: rating,
+        song_id: trackName,
+      };
+    }
     setLoading(true);
 
     axios
@@ -173,7 +186,7 @@ function PlaylistItem(props) {
               <IonItem>
                 <IonInput
                   value={trackName}
-                  placeholder="Track Name"
+                  placeholder="Track ID"
                   required="true"
                   onIonChange={(e) => setTrackName(e.detail.value)}
                 ></IonInput>

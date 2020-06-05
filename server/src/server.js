@@ -215,19 +215,36 @@ app.post("/api/recommendation/", async function (req, res) {
   const song_id = req.body.song_id;
   const playlist_id = req.body.playlist_id;
 
-  console.log(mongoose.connection.readyState);
-  const output = await apiCalls.addSongToPlaylist(
-    song_id,
-    host_id,
-    friend_id,
-    playlist_id,
-    comment,
-    rating
-  );
+  if (friend_id === "") {
+    console.log(mongoose.connection.readyState);
+    const output = await apiCalls.addSongToPlaylist(
+      song_id,
+      host_id,
+      friend_id,
+      playlist_id,
+      comment,
+      rating
+    );
 
-  console.log(output);
+    console.log(output);
 
-  res.send(output);
+    res.send(output);
+  } else {
+    let doc = await UserData.findOne({ spotify_id: host_id });
+    console.log(doc);
+    const output = await apiCalls.addSongToPlaylist(
+      song_id,
+      await doc._id,
+      friend_id,
+      playlist_id,
+      comment,
+      rating
+    );
+
+    console.log(output);
+
+    res.send(output);
+  }
 });
 
 app.post("/accountcreation", async (req, res) => {
