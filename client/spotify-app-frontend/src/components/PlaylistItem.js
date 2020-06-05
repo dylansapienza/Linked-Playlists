@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { add, arrowDown, addCircle } from "ionicons/icons";
+import { add, arrowDown, addCircle, starOutline } from "ionicons/icons";
 import {
   IonApp,
   IonHeader,
@@ -66,8 +66,8 @@ function PlaylistItem(props) {
 
   var friendadd = (
     <IonFab horizontal="start" vertical="bottom">
-      <IonFabButton color="medium" onClick={() => setShowAdd(true)}>
-        <IonIcon icon={add} />
+      <IonFabButton color="tertiary" onClick={() => setShowAdd(true)}>
+        <IonIcon icon={starOutline} />
       </IonFabButton>
     </IonFab>
   );
@@ -155,6 +155,7 @@ function PlaylistItem(props) {
         }
         if (response.data === 2) {
           setFabButton(friendadd);
+          props.playlist.p_owner = 2;
         }
       })
       .catch((error) => {
