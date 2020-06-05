@@ -510,6 +510,41 @@ app.post("/api/users", async function (req, res) {
   );
 });
 
+app.post("/api/checkrelation", async function (req, res) {
+  var user_token = req.body.user_token;
+  var p_owner = req.body.p_owner;
+  var isFriend = 4;
+
+  let doc = await UserData.findById(user_token);
+
+  let doc2 = await UserData.findOne({ spotify_id: p_owner });
+
+  if ((await doc.username) === (await doc2.username)) {
+    res.send("1");
+    return;
+  }
+
+  for (var i = 0; i < (await doc.friends.length); i++) {
+    //throwing errors here!
+    if (doc.friends[i].friend_id === doc2.username) {
+      isFriend = doc.friends[i].status;
+    }
+  }
+
+  console.log(isFriend);
+
+  if (isFriend === 1) {
+    res.send("2");
+    return;
+  }
+  if (isFriend === 2 || isFriend === 0) {
+    res.send("3");
+    return;
+  } else {
+    res.send("4");
+  }
+});
+
 app.post("/api/friendrequest", async function (req, res) {
   //Sender ID will allow us to use their token_id
   const sender_id = req.body.user_token;

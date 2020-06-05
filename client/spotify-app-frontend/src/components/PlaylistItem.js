@@ -54,6 +54,23 @@ function PlaylistItem(props) {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [imgExists, setExists] = useState(false);
+  const [fabButton, setFabButton] = useState(<div></div>);
+
+  var owneradd = (
+    <IonFab horizontal="start" vertical="bottom">
+      <IonFabButton color="success" onClick={() => setShowAdd(true)}>
+        <IonIcon icon={add} />
+      </IonFabButton>
+    </IonFab>
+  );
+
+  var friendadd = (
+    <IonFab horizontal="start" vertical="bottom">
+      <IonFabButton color="medium" onClick={() => setShowAdd(true)}>
+        <IonIcon icon={add} />
+      </IonFabButton>
+    </IonFab>
+  );
 
   function addSong() {
     var user_token = Cookies.get("key");
@@ -88,6 +105,8 @@ function PlaylistItem(props) {
 
   function openPlaylist() {
     setShowSongs(true);
+    checkRelation();
+    console.log(props);
     var user_token;
     var data;
     //For Security if Coming from discovery page, dont get other users token
@@ -112,6 +131,31 @@ function PlaylistItem(props) {
         setTracks(response.data.trackArray.items);
         console.log(tracks);
         setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function checkRelation() {
+    var user_token2 = Cookies.get("key");
+    var p_owner = props.playlist.p_spotify_id;
+    var data2 = { user_token: user_token2, p_owner: p_owner };
+    console.log(data2);
+    axios
+      .post("http://localhost:8888/api/checkrelation", data2, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.data === 1) {
+          setFabButton(owneradd);
+        }
+        if (response.data === 2) {
+          setFabButton(friendadd);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -204,11 +248,12 @@ function PlaylistItem(props) {
           </IonContent>
         )}
 
-        <IonFab horizontal="start" vertical="bottom">
+        {/* <IonFab horizontal="start" vertical="bottom">
           <IonFabButton color="success" onClick={() => setShowAdd(true)}>
             <IonIcon icon={add} />
           </IonFabButton>
-        </IonFab>
+        </IonFab> */}
+        {fabButton}
         <IonFab horizontal="end" vertical="bottom">
           <IonFabButton color="medium" onClick={() => setShowSongs(false)}>
             <IonIcon icon={arrowDown} />

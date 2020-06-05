@@ -84,6 +84,7 @@ function UserElement(props) {
     var user_token2 = Cookies.get("key");
     var username2 = props.user.username;
     var data2 = { user_token: user_token2, username: username2 };
+    console.log(data2);
     axios
       .post("http://localhost:8888/api/getFriend", data2, {
         headers: {
