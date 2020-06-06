@@ -41,6 +41,40 @@ import "@ionic/core/css/ionic.bundle.css";
 
 function TrackItem(props) {
   const [trackModal, setTrackModal] = useState(false);
+  const [recommendationInfo, setRecommendationInfo] = useState(false);
+  const [recommender, setRecommender] = useState("");
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  function getRecommendation() {
+    const trackuri = props.track.track.uri;
+    const playlist_id = props.playlist.p_id;
+    console.log(
+      "Checking Recommendation Info For",
+      trackuri,
+      "in playlist",
+      playlist_id
+    );
+
+    var data = { trackuri: trackuri, playlist_id: props.playlist.p_id };
+    //}
+    axios
+      .post("http://localhost:8888/api/getrecommendation", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data.recommendationinfo);
+        setRecommender(response.data.recommendationinfo.username);
+        setRating(response.data.recommendationinfo.rating);
+        setComment(response.data.recommendationinfo.comment);
+        setRecommendationInfo(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <>
@@ -59,22 +93,23 @@ function TrackItem(props) {
             <IonItem>
               <IonLabel>{props.track.track.album.name}</IonLabel>
             </IonItem>
-            <IonItem>
-              <IonLabel>Recommender: {props.track.track.album.name}</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Rating: {props.track.track.album.name}</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonTextarea readonly="true">
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur.
-              </IonTextarea>
-            </IonItem>
+            {recommendationInfo ? (
+              <>
+                <IonItem>
+                  <IonLabel>Recommender: {recommender}</IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>Rating: {rating}</IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonTextarea readonly="true">{comment}</IonTextarea>
+                </IonItem>
+              </>
+            ) : (
+              <IonItem>
+                <IonLabel>Added By Host.</IonLabel>
+              </IonItem>
+            )}
           </IonList>
         </IonContent>
         <IonFab horizontal="end" vertical="bottom">
@@ -88,6 +123,7 @@ function TrackItem(props) {
         button
         onClick={() => {
           setTrackModal(true);
+          getRecommendation();
         }}
       >
         <IonThumbnail slot="start">

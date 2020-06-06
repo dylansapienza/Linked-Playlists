@@ -11,7 +11,7 @@ const P_Info = require("./modules/P_Info");
 const UserData = require("./modules/UserData");
 const bcrypt = require("bcrypt");
 const apiCalls = require("./api/apicalls");
-
+const Recommendation = require("./modules/Recommendation");
 //Need to add flags to avoid deprication MONGODB
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
@@ -245,6 +245,33 @@ app.post("/api/recommendation/", async function (req, res) {
 
     res.send(output);
   }
+});
+
+app.post("/api/getrecommendation", async function (req, res) {
+  const trackuri = req.body.trackuri;
+  const playlist_id = req.body.playlist_id;
+
+  let doc = await Recommendation.findOne({
+    track_id: trackuri,
+    playlist_id: playlist_id,
+  });
+
+  console.log(doc);
+
+  if (doc.friend_id === "") {
+    res.send("400");
+    return;
+  }
+
+  let doc2 = await UserData.findById(doc.friend_id);
+
+  var recommendationinfo = {
+    username: await doc2.username,
+    rating: doc.rating,
+    comment: doc.comment,
+  };
+
+  res.send({ recommendationinfo: recommendationinfo });
 });
 
 app.post("/accountcreation", async (req, res) => {

@@ -197,6 +197,7 @@ function PlaylistItem(props) {
                 <>
                   <IonItem>
                     <IonTextarea
+                      autoGrow="true"
                       value={comment}
                       placeholder="Comments"
                       onIonChange={(e) => setComment(e.detail.value)}
@@ -256,7 +257,7 @@ function PlaylistItem(props) {
           <IonContent>
             <IonList>
               {tracks.map((track) => (
-                <TrackItem track={track} />
+                <TrackItem track={track} playlist={props.playlist} />
               ))}
             </IonList>
           </IonContent>
