@@ -589,6 +589,28 @@ app.post("/api/checkrelation", async function (req, res) {
   }
 });
 
+app.post("/api/getfriends", async function (req, res) {
+  const user_token = req.body.user_token;
+
+  let doc = await UserData.findById(user_token);
+
+  var friends = [];
+
+  for (var i = 0; i < doc.friends.length; i++) {
+    //throwing errors here!
+    let frienddetail = await UserData.findOne({
+      username: doc.friends[i].friend_id,
+    });
+    friends.push({
+      f_username: await doc.friends[i].friend_id,
+      f_status: await doc.friends[i].status,
+      f_profilepicture: await frienddetail.profile_picture,
+    });
+  }
+
+  res.send({ friends: friends });
+});
+
 app.post("/api/friendrequest", async function (req, res) {
   //Sender ID will allow us to use their token_id
   const sender_id = req.body.user_token;

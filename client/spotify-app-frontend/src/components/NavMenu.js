@@ -62,7 +62,7 @@ function NavMenu() {
               <IonIcon icon={musicalNotes}></IonIcon>
               <IonLabel>Playlists</IonLabel>
             </IonItem>
-            <IonItem>
+            <IonItem href="/friends">
               <IonIcon icon={people}></IonIcon>
               <IonLabel>Friends</IonLabel>
             </IonItem>
