@@ -1,6 +1,15 @@
 import React from "react";
 import Cookies from "js-cookie";
 import {
+  add,
+  arrowDown,
+  addCircle,
+  starOutline,
+  musicalNotes,
+  people,
+  search,
+} from "ionicons/icons";
+import {
   IonApp,
   IonHeader,
   IonTitle,
@@ -18,33 +27,46 @@ import {
   IonList,
   IonItem,
   menuController,
+  IonRouterOutlet,
+  IonMenuButton,
+  IonIcon,
+  IonLabel,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
 function Dashboard() {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{Cookies.get("key")}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonMenu side="start" menuId="custom" className="my-custom-menu">
+      <IonMenu contentId="menu" side="start" type="overlay">
         <IonHeader>
-          <IonToolbar color="tertiary">
-            <IonTitle>Custom Menu</IonTitle>
+          <IonToolbar>
+            <IonTitle>Menu</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <IonList>
-            <IonItem>Menu Item</IonItem>
-            <IonItem>Menu Item</IonItem>
-            <IonItem>Menu Item</IonItem>
-            <IonItem>Menu Item</IonItem>
-            <IonItem>Menu Item</IonItem>
+            <IonItem>
+              <IonIcon icon={musicalNotes}></IonIcon>
+              <IonLabel>Playlists</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={people}></IonIcon>
+              <IonLabel>Friends</IonLabel>
+            </IonItem>
+            <IonItem>
+              <IonIcon icon={search}></IonIcon>
+              <IonLabel>Discovery</IonLabel>
+            </IonItem>
           </IonList>
         </IonContent>
       </IonMenu>
+      <IonRouterOutlet id="menu"></IonRouterOutlet>
+      <IonHeader>
+        <IonToolbar>
+          <IonMenuButton slot="start"></IonMenuButton>
+          <IonTitle>{Cookies.get("key")}</IonTitle>
+        </IonToolbar>
+      </IonHeader>
     </IonPage>
   );
 }
