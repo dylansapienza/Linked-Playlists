@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import {
@@ -137,9 +137,13 @@ function FriendElement(props) {
         console.log(error);
       });
   }
+  useEffect(() => {
+    getFriend();
+  }, []);
 
   var notFriends = (
     <IonButton
+      slot="end"
       expand="block"
       color="medium"
       onClick={() => {
@@ -152,6 +156,7 @@ function FriendElement(props) {
 
   var sendingFriend = (
     <IonButton
+      slot="end"
       expand="block"
       color="medium"
       onClick={() => {
@@ -164,6 +169,7 @@ function FriendElement(props) {
 
   var recievingFriend = (
     <IonButton
+      slot="end"
       expand="block"
       color="medium"
       onClick={() => {
@@ -176,6 +182,7 @@ function FriendElement(props) {
 
   var areFriends = (
     <IonButton
+      slot="end"
       expand="block"
       color="success"
       onClick={() => {
@@ -218,22 +225,24 @@ function FriendElement(props) {
           </IonFabButton>
         </IonFab>
       </IonModal>
-
-      <IonItem
-        button
-        onClick={() => {
-          getPlaylists();
-        }}
-      >
-        <IonAvatar slot="start">
-          {props.friend.profile_picture !== "" ? (
-            <img src={props.friend.profile_picture} />
-          ) : (
-            <img src="https://i.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg"></img>
-          )}
-        </IonAvatar>
-        <h1>{props.friend.username}</h1>
-      </IonItem>
+      <IonCard>
+        <IonItem
+          button
+          onClick={() => {
+            getPlaylists();
+          }}
+        >
+          <IonAvatar slot="start">
+            {props.friend.profile_picture !== "" ? (
+              <img src={props.friend.profile_picture} />
+            ) : (
+              <img src="https://i.kym-cdn.com/entries/icons/mobile/000/013/564/doge.jpg"></img>
+            )}
+          </IonAvatar>
+          <h1>{props.friend.username}</h1>
+          {isFriend}
+        </IonItem>
+      </IonCard>
     </>
   );
 }

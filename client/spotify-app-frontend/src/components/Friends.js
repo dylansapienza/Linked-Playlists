@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import {
@@ -51,6 +51,10 @@ function Friends() {
       });
   }
 
+  useEffect(() => {
+    getFriends();
+  }, []);
+
   return (
     <IonPage>
       <NavMenu />
@@ -71,7 +75,6 @@ function Friends() {
       ) : (
         <IonCard></IonCard>
       )}
-      <IonButton onClick={() => getFriends()}></IonButton>
     </IonPage>
   );
 }
