@@ -37,10 +37,12 @@ import {
   IonLoading,
   IonProgressBar,
   IonToast,
+  IonMenuButton,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 import { add, arrowDown, addCircle } from "ionicons/icons";
 import PlaylistItem from "./PlaylistItem";
+import NavMenu from "./NavMenu";
 
 // function getPlaylists() {
 //   var user_token = Cookies.get("key");
@@ -123,8 +125,10 @@ function MyPlaylist() {
 
   return (
     <IonPage>
+      <NavMenu />
       <IonHeader>
         <IonToolbar>
+          <IonMenuButton slot="start"></IonMenuButton>
           <IonTitle>Playlists</IonTitle>
         </IonToolbar>
       </IonHeader>

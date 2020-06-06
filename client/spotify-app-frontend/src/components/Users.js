@@ -21,9 +21,11 @@ import {
   menuController,
   IonSearchbar,
   IonFooter,
+  IonMenuButton,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 import UserElement from "./UserElement";
+import NavMenu from "./NavMenu";
 
 function Users(params) {
   const [searchText, setSearchText] = useState("");
@@ -66,8 +68,10 @@ function Users(params) {
 
   return (
     <IonPage>
+      <NavMenu />
       <IonHeader>
         <IonToolbar>
+          <IonMenuButton slot="start"></IonMenuButton>
           <IonTitle>User Discovery</IonTitle>
         </IonToolbar>
         <IonCard>

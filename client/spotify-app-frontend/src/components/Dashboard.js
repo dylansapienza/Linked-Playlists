@@ -1,5 +1,13 @@
 import React from "react";
 import Cookies from "js-cookie";
+import ReactDOM from "react-dom";
+import {
+  Redirect,
+  BrowserRouter,
+  Route,
+  NavLink,
+  Link,
+} from "react-router-dom";
 import {
   add,
   arrowDown,
@@ -33,34 +41,12 @@ import {
   IonLabel,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
+import NavMenu from "./NavMenu";
 
 function Dashboard() {
   return (
     <IonPage>
-      <IonMenu contentId="menu" side="start" type="overlay">
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Menu</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          <IonList>
-            <IonItem>
-              <IonIcon icon={musicalNotes}></IonIcon>
-              <IonLabel>Playlists</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonIcon icon={people}></IonIcon>
-              <IonLabel>Friends</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonIcon icon={search}></IonIcon>
-              <IonLabel>Discovery</IonLabel>
-            </IonItem>
-          </IonList>
-        </IonContent>
-      </IonMenu>
-      <IonRouterOutlet id="menu"></IonRouterOutlet>
+      <NavMenu />
       <IonHeader>
         <IonToolbar>
           <IonMenuButton slot="start"></IonMenuButton>
