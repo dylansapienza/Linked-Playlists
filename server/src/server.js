@@ -602,9 +602,11 @@ app.post("/api/getfriends", async function (req, res) {
       username: doc.friends[i].friend_id,
     });
     friends.push({
-      f_username: await doc.friends[i].friend_id,
-      f_status: await doc.friends[i].status,
-      f_profilepicture: await frienddetail.profile_picture,
+      username: await doc.friends[i].friend_id,
+      status: await doc.friends[i].status,
+      profile_picture: await frienddetail.profile_picture,
+      fname: frienddetail.fname,
+      lname: frienddetail.lname,
     });
   }
 

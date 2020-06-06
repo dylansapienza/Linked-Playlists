@@ -24,11 +24,12 @@ import {
   IonMenuButton,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
-import UserElement from "./UserElement";
+import FriendElement from "./FriendElement";
 import NavMenu from "./NavMenu";
 
 function Friends() {
   const [friends, setFriends] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   function getFriends() {
     const user_token = Cookies.get("key");
@@ -42,6 +43,8 @@ function Friends() {
       })
       .then((response) => {
         console.log(response);
+        setFriends(response.data.friends);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -57,6 +60,17 @@ function Friends() {
           <IonTitle>Friends</IonTitle>
         </IonToolbar>
       </IonHeader>
+      {friends !== [] ? (
+        <IonContent>
+          <IonList>
+            {friends.map((friend) => (
+              <FriendElement friend={friend} />
+            ))}
+          </IonList>
+        </IonContent>
+      ) : (
+        <IonCard></IonCard>
+      )}
       <IonButton onClick={() => getFriends()}></IonButton>
     </IonPage>
   );

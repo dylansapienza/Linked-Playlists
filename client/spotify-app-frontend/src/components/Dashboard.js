@@ -48,6 +48,12 @@ function Dashboard() {
     <IonPage>
       <NavMenu />
       <IonHeader>
+        <IonToolbar color="dark">
+          <IonLabel position="floating">
+            Black Lives Matter
+            <a href="https://www.8cantwait.org/"> Join Campaign Zero</a>
+          </IonLabel>
+        </IonToolbar>
         <IonToolbar>
           <IonMenuButton slot="start"></IonMenuButton>
           <IonTitle>{Cookies.get("key")}</IonTitle>
