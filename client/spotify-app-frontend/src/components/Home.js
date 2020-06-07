@@ -13,6 +13,8 @@ import {
   IonCardSubtitle,
   IonButton,
   IonText,
+  IonLabel,
+  IonRow,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
@@ -21,7 +23,7 @@ function Home(props) {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Spotify Playlist App</IonTitle>
+          <IonTitle>Linked Playlists</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -36,9 +38,9 @@ function Home(props) {
 
           <IonCardContent class="ion-text-center ion-text-bold">
             <IonText color="dark">
-              Spotify Playlist App allows you to add extended funtionality to
-              your playlists! We need to authententicate you first! Press the
-              button below to begin.
+              Linked Playlists allows you to add extended funtionality to your
+              playlists! We need to authententicate you first! Press the button
+              below to begin.
             </IonText>
           </IonCardContent>
 
@@ -50,6 +52,21 @@ function Home(props) {
               strong="true"
             >
               Connect
+            </IonButton>
+            <hr></hr>
+            <hr></hr>
+            <hr></hr>
+            <IonText color="dark">
+              <h2>Already have an account?</h2>
+            </IonText>
+            <hr></hr>
+            <IonButton
+              href="/login"
+              expand="block"
+              color="primary"
+              strong="true"
+            >
+              Login
             </IonButton>
           </IonCardContent>
         </IonCard>
