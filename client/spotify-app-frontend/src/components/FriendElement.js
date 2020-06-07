@@ -227,6 +227,7 @@ function FriendElement(props) {
       </IonModal>
       <IonCard>
         <IonItem
+          lines="none"
           button
           onClick={() => {
             getPlaylists();
