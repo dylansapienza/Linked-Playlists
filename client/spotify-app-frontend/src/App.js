@@ -18,45 +18,20 @@ import Dashboard from "./components/Dashboard";
 import Users from "./components/Users";
 import Friends from "./components/Friends";
 
-// const Menu = ({ history }) => {
-//   <IonMenu>
-//     <IonItem onClick={() => history.push("/")}>Home</IonItem>;
-//     <IonItem onClick={() => history.push("/about")}>About</IonItem>;
-//   </IonMenu>;
-// };
-
-const About = () => <p>About</p>;
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { apiResponse: "" };
-  }
-  callAPI() {
-    fetch("http://localhost:8888/testAPI")
-      .then((res) => res.text())
-      .then((res) => this.setState({ apiResponse: res }));
-  }
-
-  componentWillMount() {
-    this.callAPI();
-  }
-
-  render() {
-    return (
-      <BrowserRouter>
-        <IonApp>
-          <Route exact path="/" component={Home} />
-          <Route path="/accountinfo" component={AddAccountInfo} />
-          <Route path="/login" component={Login} />
-          <Route path="/playlists" component={MyPlaylists} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/users" component={Users} />
-          <Route path="/friends" component={Friends} />
-        </IonApp>
-      </BrowserRouter>
-    );
-  }
+function App() {
+  return (
+    <BrowserRouter>
+      <IonApp>
+        <Route exact path="/" component={Home} />
+        <Route path="/accountinfo" component={AddAccountInfo} />
+        <Route path="/login" component={Login} />
+        <Route path="/playlists" component={MyPlaylists} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/users" component={Users} />
+        <Route path="/friends" component={Friends} />
+      </IonApp>
+    </BrowserRouter>
+  );
 }
 
 export default App;

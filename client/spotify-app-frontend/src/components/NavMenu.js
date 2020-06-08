@@ -17,6 +17,7 @@ import {
   people,
   search,
   reader,
+  logOutOutline,
 } from "ionicons/icons";
 import {
   IonApp,
@@ -40,10 +41,16 @@ import {
   IonMenuButton,
   IonIcon,
   IonLabel,
+  IonFooter,
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 
 function NavMenu() {
+  function logout() {
+    Cookies.set("key", "");
+    window.location.href = "/";
+  }
+
   return (
     <>
       <IonMenu contentId="menu" side="start" type="overlay">
@@ -72,6 +79,12 @@ function NavMenu() {
             </IonItem>
           </IonList>
         </IonContent>
+        <IonFooter>
+          <IonButton color="tertiary" expand="block" onClick={() => logout()}>
+            <IonIcon icon={logOutOutline} />
+            &nbsp; Logout
+          </IonButton>
+        </IonFooter>
       </IonMenu>
       <IonRouterOutlet id="menu"></IonRouterOutlet>
     </>

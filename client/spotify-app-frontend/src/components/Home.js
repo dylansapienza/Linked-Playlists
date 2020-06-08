@@ -42,9 +42,7 @@ function Home(props) {
               playlists! We need to authententicate you first! Press the button
               below to begin.
             </IonText>
-          </IonCardContent>
-
-          <IonCardContent>
+            <hr></hr>
             <IonButton
               href="http://localhost:8888/login"
               expand="block"
