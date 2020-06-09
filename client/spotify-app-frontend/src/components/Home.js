@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   IonApp,
   IonHeader,
@@ -19,6 +19,20 @@ import {
 import "@ionic/core/css/ionic.bundle.css";
 
 function Home(props) {
+  const [error, setError] = useState("");
+
+  function getError() {
+    const query = new URLSearchParams(props.location.search);
+    const error = query.get("error");
+    if (error !== "") {
+      setError(error);
+    }
+  }
+
+  useEffect(() => {
+    getError();
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>
@@ -43,6 +57,9 @@ function Home(props) {
               below to begin.
             </IonText>
             <hr></hr>
+            <IonText color="danger">
+              <i>{error}</i>
+            </IonText>
             <IonButton
               href="http://localhost:8888/login"
               expand="block"

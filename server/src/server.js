@@ -114,7 +114,7 @@ app.get("/callback", function (req, res) {
           json: true,
         };
 
-        request.get(options, function (error, response, body) {
+        request.get(options, async function (error, response, body) {
           console.log(body);
 
           //Mongoose
@@ -130,32 +130,44 @@ app.get("/callback", function (req, res) {
           //   console.log(result);
           // });
 
-          var pp_data;
+          let account_e = await UserData.exists({ spotify_id: body.id });
 
-          if (body.images[0]) {
-            pp_data = body.images[0].url;
+          if (!account_e) {
+            var pp_data;
+
+            if (body.images[0]) {
+              pp_data = body.images[0].url;
+            } else {
+              pp_data = "";
+            }
+
+            const userdata = new UserData({
+              _id: new mongoose.Types.ObjectId(),
+              spotify_id: body.id,
+              profile_picture: pp_data,
+              username: "",
+              password: "",
+              email: "",
+              fname: "",
+              lname: "",
+              access_token: access_token,
+              refresh_token: refresh_token,
+              email: body.email,
+              playlists: [],
+              friends: [],
+            });
+            userdata.save(function (err) {
+              if (err) return console.log(err);
+            });
           } else {
-            pp_data = "";
+            res.redirect(
+              "http://localhost:3000/?" +
+                querystring.stringify({
+                  error: "This Spotify ID Already Exists, Login",
+                })
+            );
+            return;
           }
-
-          const userdata = new UserData({
-            _id: new mongoose.Types.ObjectId(),
-            spotify_id: body.id,
-            profile_picture: pp_data,
-            username: "",
-            password: "",
-            email: "",
-            fname: "",
-            lname: "",
-            access_token: access_token,
-            refresh_token: refresh_token,
-            email: body.email,
-            playlists: [],
-            friends: [],
-          });
-          userdata.save(function (err) {
-            if (err) return console.log(err);
-          });
 
           // we can also pass the token to the browser to make requests from there
           res.redirect(
