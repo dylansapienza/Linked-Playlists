@@ -330,6 +330,10 @@ app.post("/login", async (req, res) => {
   UserData.findOne({ username: req.body.username })
     .exec()
     .then(async (doc) => {
+      if (doc === null) {
+        res.send("Invalid Username/Password");
+        return;
+      }
       console.log(doc);
       const query_hash = doc.password;
 
@@ -343,6 +347,7 @@ app.post("/login", async (req, res) => {
         res.send(doc.id);
       } else {
         //Invalid
+        res.send("Invalid Username/Password");
         //try again
       }
     });
