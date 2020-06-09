@@ -5,7 +5,10 @@
   "scripts": {
     "start": "cd src && node server.js",
     "client": "cd ../client/spotify-app-frontend && npm start",
-    "startapp": "concurrently \"npm run client\" \"npm start\""
+    "startapp": "concurrently \"npm run client\" \"npm start\"",
+    "build": "cd ../client/spotify-app-frontend && npm run build",
+    "install-client": "cd ../client/spotify-app-frontend && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
