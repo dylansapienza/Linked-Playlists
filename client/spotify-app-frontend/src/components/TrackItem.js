@@ -59,7 +59,7 @@ function TrackItem(props) {
     var data = { trackuri: trackuri, playlist_id: props.playlist.p_id };
     //}
     axios
-      .post("http://localhost:8888/api/getrecommendation", data, {
+      .post("/api/getrecommendation", data, {
         headers: {
           "Content-Type": "application/json",
         },

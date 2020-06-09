@@ -99,7 +99,7 @@ function PlaylistItem(props) {
     setLoading(true);
 
     axios
-      .post("http://localhost:8888/api/recommendation", data, {
+      .post("/api/recommendation", data, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -134,7 +134,7 @@ function PlaylistItem(props) {
     data = { user_token: user_token, playlist_id: props.playlist.p_id };
     //}
     axios
-      .post("http://localhost:8888/api/getTracks", data, {
+      .post("/api/getTracks", data, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -156,7 +156,7 @@ function PlaylistItem(props) {
     var data2 = { user_token: user_token2, p_owner: p_owner };
     console.log(data2);
     axios
-      .post("http://localhost:8888/api/checkrelation", data2, {
+      .post("/api/checkrelation", data2, {
         headers: {
           "Content-Type": "application/json",
         },

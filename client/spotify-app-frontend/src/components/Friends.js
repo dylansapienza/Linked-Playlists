@@ -36,7 +36,7 @@ function Friends() {
     var data = { user_token: user_token };
 
     axios
-      .post("http://localhost:8888/api/getfriends", data, {
+      .post("/api/getfriends", data, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -46,7 +46,7 @@ function FriendElement(props) {
 
     var data3 = { user_token: user_token3, username: username3 };
     axios
-      .post("http://localhost:8888/api/friendrequest", data3, {
+      .post("/api/friendrequest", data3, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -66,7 +66,7 @@ function FriendElement(props) {
 
     var data4 = { user_token: user_token4, username: username4 };
     axios
-      .post("http://localhost:8888/api/friendaccept", data4, {
+      .post("/api/friendaccept", data4, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -86,7 +86,7 @@ function FriendElement(props) {
     var data2 = { user_token: user_token2, username: username2 };
     console.log(data2);
     axios
-      .post("http://localhost:8888/api/getFriend", data2, {
+      .post("/api/getFriend", data2, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -122,7 +122,7 @@ function FriendElement(props) {
     var data = { username: username };
     console.log(data);
     axios
-      .post("http://localhost:8888/api/getuserplaylists", data, {
+      .post("/api/getuserplaylists", data, {
         headers: {
           "Content-Type": "application/json",
         },

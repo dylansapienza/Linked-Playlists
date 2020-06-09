@@ -37,7 +37,7 @@ function Login(props) {
       password: password,
     };
     axios
-      .post("http://localhost:8888/login", p_info, {
+      .post("/login", p_info, {
         headers: {
           "Content-Type": "application/json",
         },

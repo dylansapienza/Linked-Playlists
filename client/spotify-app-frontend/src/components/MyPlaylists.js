@@ -80,7 +80,7 @@ function MyPlaylist() {
     var user_token = Cookies.get("key");
     var data = { user_token: user_token };
     axios
-      .post("http://localhost:8888/api/getPlaylists", data, {
+      .post("/api/getPlaylists", data, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -102,7 +102,7 @@ function MyPlaylist() {
     console.log(data);
     setLoading(true);
     axios
-      .post("http://localhost:8888/api/playlist", data, {
+      .post("/api/playlist", data, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -44,7 +44,7 @@ function Users(params) {
     //Ping Database with Search Query
 
     axios
-      .post("http://localhost:8888/api/users", data, {
+      .post("/api/users", data, {
         headers: {
           "Content-Type": "application/json",
         },

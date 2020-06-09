@@ -31,7 +31,7 @@ function postInfo(username, fname, lname, email, password, user_id) {
     password: password,
   };
   axios
-    .post("http://localhost:8888/accountcreation", p_info, {
+    .post("/accountcreation", p_info, {
       headers: {
         "Content-Type": "application/json",
       },
