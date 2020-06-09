@@ -49,10 +49,10 @@ function Dashboard() {
       <NavMenu />
       <IonHeader>
         <IonToolbar color="dark">
-          <IonLabel position="floating">
+          {/* <IonLabel position="floating">
             Black Lives Matter
             <a href="https://www.8cantwait.org/"> Join Campaign Zero</a>
-          </IonLabel>
+          </IonLabel> */}
         </IonToolbar>
         <IonToolbar>
           <IonMenuButton slot="start"></IonMenuButton>

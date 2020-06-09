@@ -13,6 +13,9 @@ const bcrypt = require("bcrypt");
 const apiCalls = require("./api/apicalls");
 const Recommendation = require("./modules/Recommendation");
 //Need to add flags to avoid deprication MONGODB
+
+const PORT = process.env.PORT || 8888;
+
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 
@@ -737,5 +740,9 @@ app.get("/refresh_token", function (req, res) {
   });
 });
 
-console.log("Listening on 8888");
-app.listen(8888);
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("../../client/spotify-app-frontend/build"));
+}
+
+console.log("Listening on", PORT);
+app.listen(PORT);
