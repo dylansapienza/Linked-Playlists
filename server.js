@@ -560,6 +560,26 @@ app.post("/api/getTracks", async function (req, res) {
   res.send(tracks);
 });
 
+app.post("/api/tracksearch", async function (req, res) {
+  const user_token = req.body.user_token;
+  const track_name = req.body.track_name;
+  const artist_name = req.body.artist_name;
+
+  //Get Access and Refresh Token From User ID
+  let doc = await UserData.findById(user_token);
+  //Pass in track_name, artist_name, access_token, refresh_token
+  var search_results = await apiCalls.trackSearch(
+    track_name,
+    artist_name,
+    await doc.access_token,
+    await doc.refresh_token
+  );
+
+  console.log(search_results);
+  res.send(search_results);
+  //Return JSON Object with Array of Tracks
+});
+
 app.post("/api/users", async function (req, res) {
   const searchquery = req.body.searchquery;
 

@@ -407,4 +407,39 @@ module.exports = {
       }, 3000);
     });
   },
+
+  trackSearch: async function trackSearch(
+    track_name,
+    artist_name,
+    access_token,
+    refresh_token
+  ) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        var headers = {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + access_token,
+        };
+
+        var options = {
+          url:
+            "https://api.spotify.com/v1/search?q=track%3A" +
+            track_name +
+            "%20artist%3A" +
+            artist_name +
+            "&type=track",
+          headers: headers,
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            console.log(body);
+          }
+        }
+
+        request(options, callback);
+      }, 3000);
+    });
+  },
 };

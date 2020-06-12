@@ -179,6 +179,28 @@ function PlaylistItem(props) {
       });
   }
 
+  function trackSearch() {
+    var user_token3 = Cookies.get("key");
+    var data3 = {
+      user_token: user_token3,
+      track_name: nameSearch,
+      artist_name: artistSearch,
+    };
+    console.log("Searching For " + nameSearch + "by " + artistSearch);
+    axios
+      .post("/api/tracksearch", data3, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <>
       <IonModal isOpen={showSongSearch} cssClass="my-custom-class">
