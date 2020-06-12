@@ -44,6 +44,7 @@ import {
 } from "@ionic/react";
 import "@ionic/core/css/ionic.bundle.css";
 import TrackItem from "../components/TrackItem";
+import SearchItem from "./SearchItem";
 
 function PlaylistItem(props) {
   const [isLoading, setLoading] = useState(true);
@@ -58,6 +59,7 @@ function PlaylistItem(props) {
   const [showSongSearch, setSongSearch] = useState(false);
   const [nameSearch, setNameSearch] = useState("");
   const [artistSearch, setArtistSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
 
   var owneradd = (
     <IonFab horizontal="start" vertical="bottom">
@@ -194,7 +196,8 @@ function PlaylistItem(props) {
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.data.search_results);
+        setSearchResult(response.data.search_results.trackArray.items);
       })
       .catch((error) => {
         console.log(error);
@@ -237,6 +240,13 @@ function PlaylistItem(props) {
             <IonIcon icon={arrowDown} />
           </IonFabButton>
         </IonFab>
+        <IonContent>
+          <IonList>
+            {searchResult.map((track) => (
+              <SearchItem track={track} />
+            ))}
+          </IonList>
+        </IonContent>
       </IonModal>
 
       <IonModal isOpen={showAdd} cssClass="my-custom-class">
