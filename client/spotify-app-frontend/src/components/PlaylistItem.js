@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { add, arrowDown, addCircle, starOutline } from "ionicons/icons";
+import { add, arrowDown, addCircle, starOutline, search } from "ionicons/icons";
 import {
   IonApp,
   IonHeader,
@@ -55,6 +55,9 @@ function PlaylistItem(props) {
   const [rating, setRating] = useState(0);
   const [imgExists, setExists] = useState(false);
   const [fabButton, setFabButton] = useState(<div></div>);
+  const [showSongSearch, setSongSearch] = useState(false);
+  const [nameSearch, setNameSearch] = useState("");
+  const [artistSearch, setArtistSearch] = useState("");
 
   var owneradd = (
     <IonFab horizontal="start" vertical="bottom">
@@ -178,12 +181,44 @@ function PlaylistItem(props) {
 
   return (
     <>
+      <IonModal isOpen={showSongSearch} cssClass="my-custom-class">
+        <IonCard>
+          <IonCardTitle>Search For A Song</IonCardTitle>
+          <IonList inset="true">
+            <IonItem>
+              <IonInput
+                value={nameSearch}
+                placeholder="Track Name"
+                onIonChange={(e) => setNameSearch(e.detail.value)}
+              ></IonInput>
+            </IonItem>
+            <IonItem>
+              <IonInput
+                value={artistSearch}
+                placeholder="Artist Name"
+                onIonChange={(e) => setArtistSearch(e.detail.value)}
+              ></IonInput>
+            </IonItem>
+          </IonList>
+          <IonCardContent>
+            <IonButton color="success" expand="block">
+              <IonIcon icon={search} /> Search
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+        <IonFab horizontal="end" vertical="bottom">
+          <IonFabButton color="medium" onClick={() => setSongSearch(false)}>
+            <IonIcon icon={arrowDown} />
+          </IonFabButton>
+        </IonFab>
+      </IonModal>
+
       <IonModal isOpen={showAdd} cssClass="my-custom-class">
         <IonCard>
           <IonCardTitle>Add Song to {props.playlist.p_name}</IonCardTitle>
           <IonCardContent>
             <IonList inset="true">
-              <IonItem>
+              <IonItem button onClick={() => setSongSearch(true)}>
                 <IonInput
                   value={trackName}
                   placeholder="Track ID"
