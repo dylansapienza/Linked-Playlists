@@ -29,7 +29,7 @@ console.log(mongoose.connection.readyState);
 
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
-var redirect_uri = "https://stark-forest-15851.herokuapp.com/callback"; // Your redirect uri
+var redirect_uri = "https://linked-playlists.herokuapp.com/callback"; // Your redirect uri
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
