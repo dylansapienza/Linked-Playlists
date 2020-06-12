@@ -46,34 +46,10 @@ function SearchItem(props) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  function getRecommendation() {
-    const trackuri = props.track.track.uri;
-    const playlist_id = props.playlist.p_id;
-    console.log(
-      "Checking Recommendation Info For",
-      trackuri,
-      "in playlist",
-      playlist_id
-    );
-
-    var data = { trackuri: trackuri, playlist_id: props.playlist.p_id };
-    //}
-    axios
-      .post("/api/getrecommendation", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data.recommendationinfo);
-        setRecommender(response.data.recommendationinfo.username);
-        setRating(response.data.recommendationinfo.rating);
-        setComment(response.data.recommendationinfo.comment);
-        setRecommendationInfo(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  function selectSong() {
+    props.setTrackName(props.track.uri);
+    setTrackModal(false);
+    props.setSongSearch(false);
   }
 
   return (
@@ -95,6 +71,7 @@ function SearchItem(props) {
             </IonItem>
           </IonList>
         </IonContent>
+        <IonButton onClick={() => selectSong()}></IonButton>
         <IonFab horizontal="end" vertical="bottom">
           <IonFabButton color="medium" onClick={() => setTrackModal(false)}>
             <IonIcon icon={arrowDown} />

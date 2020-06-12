@@ -190,10 +190,12 @@ function MyPlaylist() {
         </IonModal>
         <IonCard>
           {isWaiting ? (
-            <>
-              <IonHeader>Loading Playlists...</IonHeader>
-              <IonProgressBar type="indeterminate"></IonProgressBar>
-            </>
+            <IonCard>
+              <IonCardContent>
+                <IonHeader>Loading Playlists...</IonHeader>
+                <IonProgressBar type="indeterminate"></IonProgressBar>
+              </IonCardContent>
+            </IonCard>
           ) : (
             <>
               <IonListHeader>My Playlists</IonListHeader>

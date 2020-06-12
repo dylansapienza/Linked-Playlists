@@ -114,6 +114,7 @@ function PlaylistItem(props) {
         setLoading(false);
         setShowAdd(false);
         setShowSongs(false);
+        setTrackName("");
         console.log(response.data);
       })
       .catch((error) => {
@@ -243,7 +244,11 @@ function PlaylistItem(props) {
         <IonContent>
           <IonList>
             {searchResult.map((track) => (
-              <SearchItem track={track} />
+              <SearchItem
+                track={track}
+                setTrackName={setTrackName}
+                setSongSearch={setSongSearch}
+              />
             ))}
           </IonList>
         </IonContent>
@@ -259,7 +264,6 @@ function PlaylistItem(props) {
                   value={trackName}
                   placeholder="Track ID"
                   required="true"
-                  onIonChange={(e) => setTrackName(e.detail.value)}
                 ></IonInput>
               </IonItem>
               {props.playlist.p_owner === 1 ? (
