@@ -575,8 +575,9 @@ app.post("/api/tracksearch", async function (req, res) {
     await doc.refresh_token
   );
 
-  console.log(search_results);
-  res.send(search_results);
+  res.send({ search_results: search_results });
+  console.log("sent!");
+  // res.send({ search_results: await search_results });
   //Return JSON Object with Array of Tracks
 });
 

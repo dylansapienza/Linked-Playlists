@@ -186,7 +186,7 @@ function PlaylistItem(props) {
       track_name: nameSearch,
       artist_name: artistSearch,
     };
-    console.log("Searching For " + nameSearch + "by " + artistSearch);
+    console.log("Searching For " + nameSearch + " by " + artistSearch);
     axios
       .post("/api/tracksearch", data3, {
         headers: {
@@ -223,7 +223,11 @@ function PlaylistItem(props) {
             </IonItem>
           </IonList>
           <IonCardContent>
-            <IonButton color="success" expand="block">
+            <IonButton
+              color="success"
+              expand="block"
+              onClick={() => trackSearch()}
+            >
               <IonIcon icon={search} /> Search
             </IonButton>
           </IonCardContent>
