@@ -4,6 +4,7 @@ var express = require("express"); // Express web server framework
 var request = require("request"); // "Request" library
 var cors = require("cors");
 const path = require("path");
+const nodemailer = require("nodemailer");
 var querystring = require("querystring");
 var cookieParser = require("cookie-parser");
 const User = require("./src/modules/User");
@@ -211,17 +212,6 @@ app.post("/api/playlist/", async (req, res) => {
 
   res.send(output);
 });
-
-// app.get("/api/playlist/:email", async function (req, res) {
-//   const queryemail = req.params.email;
-
-//   const output = await apiCalls.createPlaylist(queryemail);
-
-//   console.log(output);
-
-//   res.send(output);
-// });
-
 //Should probably send through a post request
 app.post("/api/recommendation/", async function (req, res) {
   const host_id = req.body.host_id;
@@ -307,9 +297,37 @@ app.post("/accountcreation", async (req, res) => {
       email: req.body.email,
       password: hash,
     }
-  ).exec(function (err, userdata) {
+  ).exec(async function (err, userdata) {
     if (err) console.log(err);
     else {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: "linkedplaylists@gmail.com", // generated ethereal user
+          pass: "ronaldroy", // generated ethereal password
+        },
+      });
+
+      // send mail with defined transport object
+      let info = await transporter.sendMail({
+        from: '"Linked Playlists" <linkedplaylists@gmail.com>', // sender address
+        to: UserData.email + ", baz@example.com", // list of receivers
+        subject: "Linked Playlists Registration", // Subject line
+        text:
+          "Hello" +
+          UserData.fname +
+          ", Thanks for Creating an Account on Linked Playlists!", // plain text body
+        html: "<b>Thanks!</b>", // html body
+      });
+
+      console.log("Message sent: %s", info.messageId);
+      // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+      // Preview only available when sending through an Ethereal account
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+      // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
       console.log(userdata);
       res.send("/loginuser");
     }
