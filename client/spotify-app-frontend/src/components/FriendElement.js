@@ -129,7 +129,7 @@ function FriendElement(props) {
         headers: {
           "Content-Type": "application/json",
         },
-        timeout: 1000 * 8,
+        timeout: 1000 * 10,
       })
       .then((response) => {
         console.log(response);
