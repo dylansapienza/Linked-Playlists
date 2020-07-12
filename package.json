@@ -19,7 +19,8 @@
     "express-session": "^1.17.1",
     "mongoose": "^5.9.14",
     "querystring": "~0.2.0",
-    "request": "~2.83.0"
+    "request": "~2.83.0",
+    "web-push": "^3.4.4"
   },
   "devDependencies": {
     "concurrently": "^5.2.0"
