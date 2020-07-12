@@ -318,7 +318,7 @@ app.post("/accountcreation", async (req, res) => {
           "Hello" +
           UserData.fname +
           ", Thanks for Creating an Account on Linked Playlists!", // plain text body
-        html: "<b>Thanks!</b>", // html body
+        html: "<b>Thanks! -a</b>", // html body
       });
 
       console.log("Message sent: %s", info.messageId);
