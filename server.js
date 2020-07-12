@@ -312,11 +312,11 @@ app.post("/accountcreation", async (req, res) => {
       // send mail with defined transport object
       let info = await transporter.sendMail({
         from: '"Linked Playlists" <linkedplaylists@gmail.com>', // sender address
-        to: UserData.email + ", baz@example.com", // list of receivers
+        to: req.body.email, // list of receivers
         subject: "Linked Playlists Registration", // Subject line
         text:
           "Hello" +
-          UserData.fname +
+          req.body.fname +
           ", Thanks for Creating an Account on Linked Playlists!", // plain text body
         html: "<b>Thanks! -a</b>", // html body
       });
