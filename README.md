@@ -1,4 +1,4 @@
-# spotify-playlist-app
+# Linked Playlists
 Full Stack Program Developed with MongoDB, Node.js, Express, React
 Currently in Development:
 
